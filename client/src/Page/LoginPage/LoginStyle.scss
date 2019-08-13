@@ -1,0 +1,21 @@
+@import '@material/react-layout-grid/index.scss';
+@import "@material/react-button/index.scss";
+
+.logoContainer {
+
+}
+
+.logo {
+  text-align: center;
+  font-size: 100px;
+}
+
+.buttonContainer {
+  text-align: center;
+}
+
+.buttonSelected {
+  border-bottom-color: brown;
+  border-bottom-width: 2px;
+  background-color: black;
+}

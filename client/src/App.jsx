@@ -1,14 +1,10 @@
 import React from 'react';
-import Button from '@material/react-button';
-import './App.scss';
+
+import Login from './Page/LoginPage/Login';
 
 function App() {
   return (
-    <div>
-      <Button raised className="customized">
-            Hello
-      </Button>
-    </div>
+    <Login />
   );
 }
 

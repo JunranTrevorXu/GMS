@@ -1,6 +1,0 @@
-@import "@material/react-button/index.scss";
-@import "@material/button/mixins";
-
-.customized {
-  @include mdc-button-container-fill-color(lightblue);
-}
