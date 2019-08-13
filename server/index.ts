@@ -8,7 +8,7 @@ const port = 1994;
 
 app.use(cookieSession({
     name: 'GMS-session',
-    keys: ['J', 'R'],
+    keys: ['Junran', 'Ace'],
     maxAge: 10 * 1000
 }));
 
