@@ -7,7 +7,7 @@ var app = express();
 var port = 1994;
 app.use(cookieSession({
     name: 'GMS-session',
-    keys: ['J', 'R'],
+    keys: ['Junran', 'Ace'],
     maxAge: 10 * 1000
 }));
 app.use(checkCookie_1["default"]);
