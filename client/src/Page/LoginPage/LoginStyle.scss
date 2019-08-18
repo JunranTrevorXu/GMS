@@ -1,21 +1,49 @@
 @import '@material/react-layout-grid/index.scss';
 @import "@material/react-button/index.scss";
+@import '@material/react-card/index.scss';
+@import '@material/react-typography/index.scss';
+@import "@material/typography/mixins";
+@import '@material/react-tab-bar/index.scss';
+@import '@material/react-tab-scroller/index.scss';
+@import '@material/react-tab/index.scss';
+@import '@material/react-tab-indicator/index.scss';
+@import '@material/react-text-field/index.scss';
+
+.loginContainer {
+	text-align: center;
+	padding: 20px;
+	padding-bottom: 40px;
+}
 
 .logoContainer {
-
+	@include mdc-typography-base;
+	font-size: 50px;
 }
 
-.logo {
-  text-align: center;
-  font-size: 100px;
+.tabBar {
+	margin-top: 20px;
+	width: 300px;
+	align-self: center;
 }
 
-.buttonContainer {
-  text-align: center;
+.tab {
+	margin: 10px;
 }
 
-.buttonSelected {
-  border-bottom-color: brown;
-  border-bottom-width: 2px;
-  background-color: black;
+.tabText {
+	font-size: 10px;
+}
+
+.inputForm {
+	margin-top: 10px;
+}
+
+.textField {
+	margin-top: 20px;
+	width: 200px;
+	height: 45px;
+}
+
+.input {
+	font-size: 12px;
 }
