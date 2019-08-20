@@ -4,7 +4,6 @@ import Button from '@material/react-button';
 import Card, {
   CardActions,
   CardActionButtons,
-  CardActionIcons
 } from "@material/react-card";
 import TabBar from '@material/react-tab-bar';
 import Tab from '@material/react-tab';
@@ -22,7 +21,7 @@ class Login extends React.Component {
 
     handleActiveIndexUpdate(index) {
         // console.log(index);
-        this.setState({activeIndex: index});
+        this.setState({ activeIndex: index });
     }
 
     renderInputForm(index) {
@@ -31,28 +30,48 @@ class Login extends React.Component {
             case 0:
                 return (
                     <div className='inputForm'>
-                        <TextField label='email' className='textField'>
-                            <Input 
-                                value={email}
-                                onChange={(e) => this.setState({email: e.currentTarget.value})}
-                                className='input'
-                            />
-                        </TextField>
-                        <TextField label='password' className='textField'>
-                            <Input 
-                                value={password}
-                                type='password'
-                                onChange={(e) => this.setState({password: e.currentTarget.value})}
-                                className='input'
-                            />
-                        </TextField>
+                        <div>
+                            <TextField label='email' className='textField'>
+                                <Input
+                                    value={email}
+                                    onChange={(e) => this.setState({ email: e.currentTarget.value })}
+                                    className='input'
+                                />
+                            </TextField>
+                        </div>
+                        <div>
+                            <TextField label='password' className='textField'>
+                                <Input
+                                    value={password}
+                                    type='password'
+                                    onChange={(e) => this.setState({ password: e.currentTarget.value })}
+                                    className='input'
+                                />
+                            </TextField>
+                        </div>
                     </div>
-                )
+                );
+            case 1:
+                return (
+                    <div className='inputForm'>
+                        <div>
+                            <TextField label='email' className='textField'>
+                                <Input
+                                    value={email}
+                                    onChange={(e) => this.setState({ email: e.currentTarget.value })}
+                                    className='input'
+                                />
+                            </TextField>
+                        </div>
+                    </div>
+                );
+            default:
+                break;
         }
     }
 
     render() {
-        const { option, activeIndex } = this.state;
+        const { activeIndex } = this.state;
         return (
             <Grid>
                 <Row>
@@ -79,6 +98,7 @@ class Login extends React.Component {
                                 </Tab>
                             </TabBar>
                             {this.renderInputForm(activeIndex)}
+                            <Button className='button'>{activeIndex === 0 ? 'Sign in' : 'Sign up'}</Button>
                         </Card>
                     </Cell>
                 </Row>

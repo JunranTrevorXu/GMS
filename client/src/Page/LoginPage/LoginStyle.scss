@@ -8,6 +8,7 @@
 @import '@material/react-tab/index.scss';
 @import '@material/react-tab-indicator/index.scss';
 @import '@material/react-text-field/index.scss';
+@import '@material/react-button/index.scss';
 
 .loginContainer {
 	text-align: center;
@@ -41,9 +42,17 @@
 .textField {
 	margin-top: 20px;
 	width: 200px;
-	height: 45px;
+	height: 50px;
+	border-radius: 0;
 }
 
 .input {
 	font-size: 12px;
+}
+
+.button {
+	align-self: center;
+	width: 100px;
+	margin-top: 20px;
+	font-size: 15px;
 }
