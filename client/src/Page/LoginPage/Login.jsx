@@ -19,9 +19,24 @@ class Login extends React.Component {
         };
     }
 
+    isButtonDisabled(index) {
+        const { email, password } = this.state;
+        switch (index) {
+            case 0:
+                return !(email && password);
+            case 1:
+                return !email;
+            default:
+                break;
+        }
+    }
+
     handleActiveIndexUpdate(index) {
-        // console.log(index);
         this.setState({ activeIndex: index });
+    }
+
+    handleButtonClick(index) {
+        const { email } = this.state;
     }
 
     renderInputForm(index) {
@@ -72,6 +87,7 @@ class Login extends React.Component {
 
     render() {
         const { activeIndex } = this.state;
+        console.log(this.isButtonDisabled(activeIndex));
         return (
             <Grid>
                 <Row>
@@ -84,13 +100,13 @@ class Login extends React.Component {
                                 activeIndex={activeIndex} 
                                 handleActiveIndexUpdate={(index) => this.handleActiveIndexUpdate(index)}
                             >
-                                <Tab 
+                                <Tab
                                     focusOnActivate={false}
                                     className='tab'
                                 >
                                     <span className='tabText'>Sign In</span>
                                 </Tab>
-                                <Tab 
+                                <Tab
                                     focusOnActivate={false}
                                     className='tab'
                                 >
@@ -98,7 +114,13 @@ class Login extends React.Component {
                                 </Tab>
                             </TabBar>
                             {this.renderInputForm(activeIndex)}
-                            <Button className='button'>{activeIndex === 0 ? 'Sign in' : 'Sign up'}</Button>
+                            <Button
+                                className='button'
+                                onClick={() => this.handleButtonClick(activeIndex)}
+                                disabled={this.isButtonDisabled(activeIndex)}
+                            >
+                                {activeIndex === 0 ? 'Sign in' : 'Sign up'}
+                            </Button>
                         </Card>
                     </Cell>
                 </Row>
