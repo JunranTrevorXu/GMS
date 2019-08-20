@@ -43,7 +43,7 @@ class Login extends React.Component {
     }
 
     handleButtonClick(index) {
-        const { email } = this.state;
+        // TODO
     }
 
     renderInputForm(index) {
@@ -117,7 +117,6 @@ class Login extends React.Component {
 
     render() {
         const { activeIndex } = this.state;
-        console.log(this.isButtonDisabled(activeIndex));
         return (
             <Grid>
                 <Row>
