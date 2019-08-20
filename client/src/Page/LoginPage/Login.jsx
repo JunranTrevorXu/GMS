@@ -19,20 +19,27 @@ class Login extends React.Component {
         };
     }
 
+    componentDidMount() {
+        if (this.props.match.params.verificationCode) {
+            this.setState({ vCode: this.props.match.params.verificationCode, activeIndex: 1 });
+        }
+    }
+
     isButtonDisabled(index) {
-        const { email, password } = this.state;
+        const { email, password, confirmedPassword } = this.state;
         switch (index) {
             case 0:
                 return !(email && password);
             case 1:
-                return !email;
+                return this.state.vCode ? !(password && confirmedPassword && password === confirmedPassword) : !email;
             default:
                 break;
         }
     }
 
     handleActiveIndexUpdate(index) {
-        this.setState({ activeIndex: index });
+        if (!this.state.vCode)
+            this.setState({ activeIndex: index });
     }
 
     handleButtonClick(index) {
@@ -40,7 +47,7 @@ class Login extends React.Component {
     }
 
     renderInputForm(index) {
-        const { email, password } = this.state;
+        const { email, password, confirmedPassword } = this.state;
         switch (index) {
             case 0:
                 return (
@@ -68,12 +75,35 @@ class Login extends React.Component {
                 );
             case 1:
                 return (
+                this.state.vCode ?
+                    <div className='inputForm'>
+                        <div>
+                            <TextField label='password' className='textField'>
+                                <Input
+                                    value={password}
+                                    onChange={(e) => this.setState({ password: e.currentTarget.value })}
+                                    className='input'
+                                />
+                            </TextField>
+                        </div>
+                        <div>
+                            <TextField label='confirm password' className='textField'>
+                                <Input
+                                    value={confirmedPassword}
+                                    type='password'
+                                    onChange={(e) => this.setState({ confirmedPassword: e.currentTarget.value })}
+                                    className='input'
+                                />
+                            </TextField>
+                        </div>
+                    </div>
+                    :
                     <div className='inputForm'>
                         <div>
                             <TextField label='email' className='textField'>
                                 <Input
                                     value={email}
-                                    onChange={(e) => this.setState({ email: e.currentTarget.value })}
+                                    onChange={(e) => this.setState({email: e.currentTarget.value})}
                                     className='input'
                                 />
                             </TextField>
@@ -119,7 +149,7 @@ class Login extends React.Component {
                                 onClick={() => this.handleButtonClick(activeIndex)}
                                 disabled={this.isButtonDisabled(activeIndex)}
                             >
-                                {activeIndex === 0 ? 'Sign in' : 'Sign up'}
+                                {activeIndex === 0 ? 'Sign in' : (this.state.vCode ? 'Submit' : 'Sign up')}
                             </Button>
                         </Card>
                     </Cell>
