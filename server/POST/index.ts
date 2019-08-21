@@ -1,6 +1,6 @@
 import loginRouter from './login';
 
-function applyPostRouters(app) {
+function applyPostRouters(app): void {
     app.use('/login', loginRouter);
 }
 

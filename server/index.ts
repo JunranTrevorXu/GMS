@@ -6,7 +6,7 @@ import applyMiddleWare from './Middleware/index';
 import applyPostRouters from './POST/index';
 
 const app = express();
-const port = 1994;
+const port: number = 1994;
 
 app.use(cookieSession({
     name: 'GMS-session',
