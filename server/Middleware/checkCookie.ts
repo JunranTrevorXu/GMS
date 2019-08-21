@@ -1,8 +1,6 @@
-"use strict";
-exports.__esModule = true;
 function checkCookie(req, res, next) {
-    // expired
-    if (req.session.isNew) {
+    // expired and is not a login request
+    if (req.session.isNew && req.originalUrl !== '/login') {
         req.session.spinner = true;
         res.send('please login');
     }
@@ -12,4 +10,5 @@ function checkCookie(req, res, next) {
         next();
     }
 }
-exports["default"] = checkCookie;
+
+export default checkCookie;

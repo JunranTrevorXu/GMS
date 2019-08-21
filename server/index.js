@@ -2,7 +2,8 @@
 exports.__esModule = true;
 var express = require("express");
 var cookieSession = require("cookie-session");
-var checkCookie_1 = require("./checkCookie");
+var index_1 = require("./Middleware/index");
+var index_2 = require("./POST/index");
 var app = express();
 var port = 1994;
 app.use(cookieSession({
@@ -10,8 +11,6 @@ app.use(cookieSession({
     keys: ['Junran', 'Ace'],
     maxAge: 10 * 1000
 }));
-app.use(checkCookie_1["default"]);
-app.get('/', function (req, res) {
-    res.send('hello world');
-});
+index_1["default"](app);
+index_2["default"](app);
 app.listen(port, function () { return console.log('listening in port ', port); });

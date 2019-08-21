@@ -1,7 +1,9 @@
 import express = require('express');
 import cookieSession = require('cookie-session');
 
-import checkCookie from './checkCookie';
+import applyMiddleWare from './Middleware/index';
+
+import applyPostRouters from './POST/index';
 
 const app = express();
 const port = 1994;
@@ -12,10 +14,8 @@ app.use(cookieSession({
     maxAge: 10 * 1000
 }));
 
-app.use(checkCookie);
+applyMiddleWare(app);
 
-app.get('/', (req, res) => {
-    res.send('hello world');
-});
+applyPostRouters(app);
 
 app.listen(port, () => console.log('listening in port ', port));
