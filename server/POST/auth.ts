@@ -31,7 +31,6 @@ router.post('/signup', async (req, res) => {
             await sendEmail(to, subject, text);
 
             // set encrypted Id for submit register
-            console.log("encryptedId set: ", result.id, req.method, req.originalUrl);
             req.session.encryptedId = result.id;
             res.send({OK: true});
         }

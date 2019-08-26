@@ -88,7 +88,6 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
             case 4:
                 _a.sent();
                 // set encrypted Id for submit register
-                console.log("encryptedId set: ", result.id, req.method, req.originalUrl);
                 req.session.encryptedId = result.id;
                 res.send({ OK: true });
                 return [3 /*break*/, 6];
