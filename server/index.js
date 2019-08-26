@@ -3,6 +3,7 @@ exports.__esModule = true;
 var express = require('express');
 var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 require("dotenv").config();
 var index_1 = require("./Database/MySql/index");
 var index_2 = require("./Middleware/index");
@@ -21,10 +22,17 @@ index_1["default"].connect(function (error) {
 app.use(cookieSession({
     name: 'GMS-session',
     keys: ['Junran', 'Ace'],
-    maxAge: 10 * 1000
+    maxAge: 5 * 60 * 1000
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+//app.use(cookieParser());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Origin", process.env.clientHost);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 // customized middlewares and handlers
 index_2["default"](app);
 index_3["default"](app);
