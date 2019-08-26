@@ -6,7 +6,7 @@ function App() {
   return (
       <BrowserRouter>
           <Route exact path='/' component={Login} />
-          <Route path='/:verificationCode' component={Login} />
+          <Route path='/signup' render={(props) => <Login {...props} submit={true} />} />
       </BrowserRouter>
   );
 }
