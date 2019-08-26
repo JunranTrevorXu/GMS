@@ -1,7 +1,7 @@
-import loginRouter from './login';
+import authRouter from './auth';
 
 function applyPostRouters(app): void {
-    app.use('/login', loginRouter);
+    app.use('/auth', authRouter);
 }
 
 export default applyPostRouters;

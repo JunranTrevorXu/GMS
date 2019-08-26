@@ -1,21 +1,42 @@
-import express = require('express');
-import cookieSession = require('cookie-session');
+const express = require('express');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+require("dotenv").config();
 
+import mysqlConnection from './Database/MySql/index';
 import applyMiddleWare from './Middleware/index';
-
 import applyPostRouters from './POST/index';
 
 const app = express();
-const port: number = 1994;
+const port:number = parseInt(process.env.port);
+
+mysqlConnection.connect((error) => {
+    if (error) {
+        console.error('mysql connecting: error' + error.stack);
+    }
+    else {
+        console.log('mysql connected as id ' + mysqlConnection.threadId);
+    }
+});
+
+// middlewares
 
 app.use(cookieSession({
     name: 'GMS-session',
     keys: ['Junran', 'Ace'],
     maxAge: 10 * 1000
 }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+// customized middlewares and handlers
 
 applyMiddleWare(app);
-
 applyPostRouters(app);
+
+app.get('/', (req, res) => {
+    res.send("hello");
+});
 
 app.listen(port, () => console.log('listening in port ', port));

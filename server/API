@@ -1,0 +1,4 @@
+/auth
+    /login { email:string, password:string }
+    /signup { email:string }
+    /signup/submit { nickname:string, password:string }
