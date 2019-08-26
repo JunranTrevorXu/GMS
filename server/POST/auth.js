@@ -73,7 +73,7 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
                 to = req.body.email;
                 subject = "One more step needed";
                 text = "Thank you for registering for GMS!\nClick the link below to finish the signup:\n\n"
-                    + "http://" + process.env.clientHost + "/signup";
+                    + process.env.clientHost + "/signup";
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 7, , 8]);
@@ -88,6 +88,7 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
             case 4:
                 _a.sent();
                 // set encrypted Id for submit register
+                console.log("encryptedId set: ", result.id, req.method, req.originalUrl);
                 req.session.encryptedId = result.id;
                 res.send({ OK: true });
                 return [3 /*break*/, 6];
@@ -97,7 +98,7 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
             case 6: return [3 /*break*/, 8];
             case 7:
                 error_2 = _a.sent();
-                if (error_2.code === 'ER_DUP_ENTRY') {
+                if (error_2.code === 'ER_DUP_EMAIL') {
                     res.send({ code: 'ER_DUP_EMAIL' });
                 }
                 else {
