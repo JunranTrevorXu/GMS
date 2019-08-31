@@ -38,8 +38,8 @@ router.post('/signup', async (req, res) => {
             res.send('/signup 1');
         }
     } catch (error) {
-        if (error.code === 'ER_DUP_EMAIL') {
-            res.send({code: 'ER_DUP_EMAIL'});
+        if (error.code === 'ER_DUP_ENTRY') {
+            res.send({code: 'ER_DUP_ENTRY'});
         }
         else {
             res.send('/signup 2');

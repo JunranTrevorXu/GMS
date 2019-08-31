@@ -2,7 +2,7 @@ import mysqlConnection from './index';
 
 function createUser(email): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`insert into USER (id, email) values (uuid(), "${email}");`,
+        mysqlConnection.query(`insert into USER (email) values ("${email}");`,
             (error, results) => {
                 if (error) {
                     console.log('create user error: ', error);

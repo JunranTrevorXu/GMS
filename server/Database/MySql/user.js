@@ -3,7 +3,7 @@ exports.__esModule = true;
 var index_1 = require("./index");
 function createUser(email) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("insert into USER (id, email) values (uuid(), \"" + email + "\");", function (error, results) {
+        index_1["default"].query("insert into USER (email) values (\"" + email + "\");", function (error, results) {
             if (error) {
                 console.log('create user error: ', error);
                 reject(error);
