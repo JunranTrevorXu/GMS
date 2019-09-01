@@ -1,9 +1,4 @@
-import axios from "axios";
-
-const instance = axios.create({
-  baseURL: "http://localhost:1994",
-  withCredentials: true
-});
+import { instance } from "./index";
 
 function signin(email, password) {
   const option = {
@@ -14,9 +9,13 @@ function signin(email, password) {
       password
     }
   };
-  instance(option)
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+  return instance(option)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      return error;
+    });
 }
 
 function signup(email) {
@@ -27,10 +26,13 @@ function signup(email) {
       email
     }
   };
-  console.log("here");
-  instance(option)
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+  return instance(option)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      return error;
+    });
 }
 
 function submit(nickname, password) {
@@ -42,9 +44,27 @@ function submit(nickname, password) {
       password
     }
   };
-  instance(option)
-    .then(response => console.log(response))
-    .catch(error => console.log(error));
+  return instance(option)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      return error;
+    });
 }
 
-export { signin, signup, submit };
+function checkAuth() {
+  const option = {
+    method: "get",
+    url: "/auth"
+  };
+  return instance(option)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      return error;
+    });
+}
+
+export { signin, signup, submit, checkAuth };

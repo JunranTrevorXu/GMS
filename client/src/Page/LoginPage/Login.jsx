@@ -1,15 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import Button from '@material/react-button';
-import Card, {
-  CardActions,
-  CardActionButtons,
-} from "@material/react-card";
+import Card from "@material/react-card";
 import TabBar from '@material/react-tab-bar';
 import Tab from '@material/react-tab';
 import TextField, { Input } from '@material/react-text-field';
+import UserAction from '../../ReduxStore/User/Actions';
 
-import * as Auth from '../../ApiService/index';
+import * as UserService from '../../ApiService/UserService';
 
 import './LoginStyle.scss';
 
@@ -18,10 +17,12 @@ class Login extends React.Component {
         super(props);
         this.state = {
             activeIndex: 0,
+            loading: false
         };
     }
 
     componentDidMount() {
+        console.log(this.props.user);
         if (this.props.submit) {
             this.setState({ submit: true, activeIndex: 1 });
         }
@@ -44,14 +45,52 @@ class Login extends React.Component {
             this.setState({ activeIndex: index });
     }
 
-    handleButtonClick(index) {
+    async handleButtonClick(index) {
         if (this.state.submit) {
             const { nickname, password } = this.state;
-            Auth.submit(nickname, password);
+
+            this.setState({loading: true});
+            const response = await UserService.submit(nickname, password);
+            this.setState({loading: false});
+
+            if (response.data.OK) {
+              // navigate to home
+            }
+            else {
+              alert('error: ', response.data.code || response.data);
+              console.log(response);
+            }
         }
         else {
             const { email, password } = this.state;
-            index === 0 ? Auth.signin(email, password) : Auth.signup(email);
+
+            this.setState({loading: true});
+            if (index === 0) {
+                const response = await UserService.signin(email, password);
+                this.setState({loading: false});
+
+                if (response.data.OK) {
+                  // navigate to home
+                }
+                else {
+                  alert('error: incorrect email or password');
+                  this.setState({password: ''});
+                  console.log(response);
+                }
+            }
+            else {
+                const response = await UserService.signup(email);
+                this.setState({loading: false});
+
+                if (response.data.OK) {
+                  this.setState({email: ''});
+                  alert('email sent');
+                }
+                else {
+                  alert('error: ', response.data.code || response.data);
+                  console.log(response);
+                }
+            }
         }
     }
 
@@ -177,4 +216,11 @@ class Login extends React.Component {
     }
 }
 
-export default Login;
+const mapStateToProps = (state) => ({
+    user: state.user.toJS(),
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Login);
