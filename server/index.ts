@@ -5,7 +5,7 @@ require("dotenv").config();
 
 import mysqlConnection from './Database/MySql/index';
 import applyMiddleWare from './Middleware/index';
-import applyPostRouters from './POST/index';
+import applyAuthRouters from './AUTH/index';
 
 const app = express();
 const port:number = parseInt(process.env.port);
@@ -24,7 +24,7 @@ mysqlConnection.connect((error) => {
 app.use(cookieSession({
     name: 'GMS-session',
     keys: ['Junran', 'Ace'],
-    maxAge: 5 * 60 * 1000
+    maxAge: 30 * 60 * 1000
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -39,7 +39,7 @@ app.use(function(req, res, next) {
 // customized middlewares and handlers
 
 applyMiddleWare(app);
-applyPostRouters(app);
+applyAuthRouters(app);
 
 app.get('/', (req, res) => {
     res.send("hello");

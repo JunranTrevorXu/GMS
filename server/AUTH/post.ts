@@ -7,15 +7,22 @@ import * as mysqlUser from '../Database/MySql/user';
 router.post('/signin', async(req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    let result;
 
     try {
-        await mysqlUser.login(email, password);
+        result = await mysqlUser.login(email, password);
     } catch (error) {
         res.send('/signin 1');
+        return;
     }
 
-    req.session.loggedin = true;
-    res.send({OK: true});
+    if (result.auth) {
+        req.session.loggedin = true;
+        res.send({OK: true});
+    }
+    else {
+        res.send('/signin 2');
+    }
 });
 
 router.post('/signup', async (req, res) => {
@@ -41,6 +48,9 @@ router.post('/signup', async (req, res) => {
         if (error.code === 'ER_DUP_ENTRY') {
             res.send({code: 'ER_DUP_ENTRY'});
         }
+        else if (error.code === 'EENVELOPE') {
+            res.send({code: 'BAD_EMAIL'});
+        }
         else {
             res.send('/signup 2');
         }
@@ -57,6 +67,7 @@ router.post('/signup/submit', async (req, res) => {
         await mysqlUser.setPassword(id, password);
     } catch (error) {
         res.send('/signup/submit 1');
+        return;
     }
 
     req.session.encryptedId = null;

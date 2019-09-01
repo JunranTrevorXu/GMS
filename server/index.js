@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 require("dotenv").config();
 var index_1 = require("./Database/MySql/index");
 var index_2 = require("./Middleware/index");
-var index_3 = require("./POST/index");
+var index_3 = require("./AUTH/index");
 var app = express();
 var port = parseInt(process.env.port);
 index_1["default"].connect(function (error) {
@@ -21,7 +21,7 @@ index_1["default"].connect(function (error) {
 app.use(cookieSession({
     name: 'GMS-session',
     keys: ['Junran', 'Ace'],
-    maxAge: 5 * 60 * 1000
+    maxAge: 30 * 60 * 1000
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -1,5 +1,5 @@
 function isLoginRequest(url: string): boolean {
-    const legalUrls: Array<string> = ['/auth/signin', '/auth/signup', '/auth/signup/submit', '/'];
+    const legalUrls: Array<string> = ['/auth/signin', '/auth/signup', '/auth/signup/submit', '/auth', '/'];
     return legalUrls.indexOf(url) !== -1;
 }
 
@@ -18,15 +18,14 @@ function checkCookie(req, res, next) {
 
         // submit register form without a userId
         if (req.originalUrl === '/auth/signup/submit' && !req.session.encryptedId) {
-            console.log("unauth: ", req.method, req.originalUrl);
             res.statusCode = 401;
             res.send('Unauthorized to perform this action');
         }
 
-        // pass
+        // not expired or is login request, pass
         else {
 
-            // not expired, reset a field to reset the expire time
+            // if not a login request, reset a field to reset the expire time
             if (!isLoginRequest(req.originalUrl)) {
                 req.session.spinner = !req.session.spinner;
             }
