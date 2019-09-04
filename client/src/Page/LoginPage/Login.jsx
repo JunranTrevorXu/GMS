@@ -6,7 +6,6 @@ import Card from "@material/react-card";
 import TabBar from '@material/react-tab-bar';
 import Tab from '@material/react-tab';
 import TextField, { Input } from '@material/react-text-field';
-import UserAction from '../../ReduxStore/User/Actions';
 
 import * as UserService from '../../ApiService/UserService';
 
@@ -21,8 +20,13 @@ class Login extends React.Component {
         };
     }
 
-    componentDidMount() {
-        console.log(this.props.user);
+    async componentDidMount() {
+        if (this.props.history.location.pathname === '/') {
+            const response = await UserService.checkAuth();
+            if (response.data.isLoggedIn) {
+                this.props.history.replace('/home');
+            }
+        }
         if (this.props.submit) {
             this.setState({ submit: true, activeIndex: 1 });
         }
@@ -54,7 +58,8 @@ class Login extends React.Component {
             this.setState({loading: false});
 
             if (response.data.OK) {
-              // navigate to home
+                console.log('redirect');
+                this.props.history.replace('/home');
             }
             else {
               alert('error: ', response.data.code || response.data);
@@ -70,7 +75,8 @@ class Login extends React.Component {
                 this.setState({loading: false});
 
                 if (response.data.OK) {
-                  // navigate to home
+                    console.log('redirect');
+                    this.props.history.replace('/home');
                 }
                 else {
                   alert('error: incorrect email or password');

@@ -10,6 +10,8 @@ import Login from './Page/LoginPage/Login';
 import Home from './Page/HomePage/Home';
 import NotFound from './Page/NotFoundPage/NotFound';
 
+import './App.scss';
+
 const { store, persistor } = createStore();
 
 class PrivateRouter extends React.Component {
