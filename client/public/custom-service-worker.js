@@ -10,9 +10,9 @@ self.addEventListener("activate", function(event) {
 self.addEventListener("push", function(event) {
   console.log(event);
   setTimeout(() => {
-    self.registration
-      .showNotification("new message", { body: "body" })
-      .then(result => console.log(result));
+    self.registration.showNotification("new message " + navigator.onLine, {
+      body: "body"
+    });
   }, 100);
   if (event.data) {
     console.log("This push event with data: ", event.data.text());
