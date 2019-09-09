@@ -22,18 +22,16 @@ function _combineReducers() {
   });
 }
 
-export default () => {
-  const rootReducer = _combineReducers();
+const rootReducer = _combineReducers();
 
-  const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 
-  // Redux persist
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+// Redux persist
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware));
-  const persistor = persistStore(store);
+const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware));
+const persistor = persistStore(store);
 
-  sagaMiddleware.run(rootSaga);
+sagaMiddleware.run(rootSaga);
 
-  return { store, persistor };
-};
+export { store, persistor };

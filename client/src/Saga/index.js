@@ -1,5 +1,4 @@
-import { takeLatest, all } from "redux-saga/effects";
-import { UserTypes } from "../ReduxStore/User/Actions";
+import { all } from "redux-saga/effects";
 
 export default function* root() {
   yield all([]);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
-import createStore from './ReduxStore/index';
+import { store, persistor } from './ReduxStore/index';
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import * as UserService from './ApiService/UserService';
@@ -11,8 +11,6 @@ import Home from './Page/HomePage/Home';
 import NotFound from './Page/NotFoundPage/NotFound';
 
 import './App.scss';
-
-const { store, persistor } = createStore();
 
 class PrivateRouter extends React.Component {
   constructor(props) {
@@ -32,7 +30,6 @@ class PrivateRouter extends React.Component {
   render() {
     const { component: Component, ...rest } = this.props;
     const { loading, auth } = this.state;
-    console.log(loading, auth);
 
     return (loading ? null :
       <Route
