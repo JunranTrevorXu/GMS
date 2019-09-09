@@ -9,9 +9,13 @@ self.addEventListener("activate", function(event) {
 
 self.addEventListener("push", function(event) {
   console.log(event);
-  self.registration.showNotification("new message", { body: "body" });
+  setTimeout(() => {
+    self.registration
+      .showNotification("new message", { body: "body" })
+      .then(result => console.log(result));
+  }, 100);
   if (event.data) {
-    console.log("This push event has data: ", event.data.text());
+    console.log("This push event with data: ", event.data.text());
   } else {
     console.log("This push event has no data.");
   }
@@ -20,7 +24,7 @@ self.addEventListener("push", function(event) {
 self.addEventListener("notificationclick", function(event) {
   console.log(event);
   event.notification.close();
-  window.open("http://localhost:3000");
+  clients.openWindow("http://localhost:3000");
 });
 
 self.addEventListener("notificationclose", function(event) {
