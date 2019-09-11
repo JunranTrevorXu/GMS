@@ -7,6 +7,7 @@ require("dotenv").config();
 var index_1 = require("./Database/MySql/index");
 var index_2 = require("./Middleware/index");
 var index_3 = require("./AUTH/index");
+var index_4 = require("./USER/index");
 var app = express();
 var port = parseInt(process.env.port);
 index_1["default"].connect(function (error) {
@@ -35,6 +36,7 @@ app.use(function (req, res, next) {
 // customized middlewares and handlers
 index_2["default"](app);
 index_3["default"](app);
+index_4["default"](app);
 app.get('/', function (req, res) {
     res.send("hello");
 });

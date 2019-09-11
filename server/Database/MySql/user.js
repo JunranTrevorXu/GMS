@@ -119,3 +119,74 @@ function setOnline(userId) {
     });
 }
 exports.setOnline = setOnline;
+function getOnline(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select online from ONLINE where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve({ online: results.length > 0 ? results[0].online : null });
+            }
+        });
+    });
+}
+function sendFriendRequest(fromUserId, toUserId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (" + fromUserId + ", " + toUserId + ", false)", function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.sendFriendRequest = sendFriendRequest;
+function acceptFriendRequest(fromUserId, toUserId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update FRIEND_REQUEST set viewed = true where fromUserId = " + fromUserId + " and toUserId = " + toUserId, function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.acceptFriendRequest = acceptFriendRequest;
+function addFriend(userAId, userBId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("insert into FRIEND (userAId, userBId) values (" + userAId + ", " + userBId + ")", function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        })
+            .then(function () {
+            index_1["default"].query("insert into FRIEND (userAId, userBId) values (" + userBId + ", " + userAId + ")", function (error, results) {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve();
+                }
+            });
+        });
+    });
+}
+exports.addFriend = addFriend;

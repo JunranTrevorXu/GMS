@@ -41,7 +41,7 @@ var router = express.Router();
 var email_1 = require("../Service/email");
 var mysqlUser = require("../Database/MySql/user");
 router.post('/signin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var email, password, result, error_1;
+    var email, password, result, error_1, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -59,26 +59,34 @@ router.post('/signin', function (req, res) { return __awaiter(_this, void 0, voi
                 res.send('/signin 1');
                 return [2 /*return*/];
             case 4:
-                if (!result.auth) return [3 /*break*/, 7];
-                return [4 /*yield*/, mysqlUser.getUserId(email)];
+                if (!result.auth) return [3 /*break*/, 10];
+                _a.label = 5;
             case 5:
+                _a.trys.push([5, 8, , 9]);
+                return [4 /*yield*/, mysqlUser.getUserId(email)];
+            case 6:
                 result = _a.sent();
                 return [4 /*yield*/, mysqlUser.setOnline(result.id)];
-            case 6:
+            case 7:
                 _a.sent();
                 req.session.encryptedId = result.id;
                 req.session.loggedin = true;
                 res.send({ OK: true });
-                return [3 /*break*/, 8];
-            case 7:
+                return [3 /*break*/, 9];
+            case 8:
+                error_2 = _a.sent();
                 res.send('/signin 2');
-                _a.label = 8;
-            case 8: return [2 /*return*/];
+                return [2 /*return*/];
+            case 9: return [3 /*break*/, 11];
+            case 10:
+                res.send('/signin 3');
+                _a.label = 11;
+            case 11: return [2 /*return*/];
         }
     });
 }); });
 router.post('/signup', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var to, subject, text, result, error_2;
+    var to, subject, text, result, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -111,11 +119,11 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
                 _a.label = 7;
             case 7: return [3 /*break*/, 9];
             case 8:
-                error_2 = _a.sent();
-                if (error_2.code === 'ER_DUP_ENTRY') {
+                error_3 = _a.sent();
+                if (error_3.code === 'ER_DUP_ENTRY') {
                     res.send({ code: 'ER_DUP_ENTRY' });
                 }
-                else if (error_2.code === 'EENVELOPE') {
+                else if (error_3.code === 'EENVELOPE') {
                     res.send({ code: 'BAD_EMAIL' });
                 }
                 else {
@@ -127,7 +135,7 @@ router.post('/signup', function (req, res) { return __awaiter(_this, void 0, voi
     });
 }); });
 router.post('/signup/submit', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var id, nickname, password, error_3;
+    var id, nickname, password, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -148,7 +156,7 @@ router.post('/signup/submit', function (req, res) { return __awaiter(_this, void
                 _a.sent();
                 return [3 /*break*/, 6];
             case 5:
-                error_3 = _a.sent();
+                error_4 = _a.sent();
                 res.send('/signup/submit 1');
                 return [2 /*return*/];
             case 6:
@@ -159,11 +167,11 @@ router.post('/signup/submit', function (req, res) { return __awaiter(_this, void
     });
 }); });
 router.post('./signout', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var userId, error_4;
+    var userId, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                userId = req.body.userId;
+                userId = req.session.encryptedId;
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
@@ -172,7 +180,7 @@ router.post('./signout', function (req, res) { return __awaiter(_this, void 0, v
                 _a.sent();
                 return [3 /*break*/, 4];
             case 3:
-                error_4 = _a.sent();
+                error_5 = _a.sent();
                 res.send('/signout 1');
                 return [2 /*return*/];
             case 4:

@@ -6,6 +6,7 @@ require("dotenv").config();
 import mysqlConnection from './Database/MySql/index';
 import applyMiddleWare from './Middleware/index';
 import applyAuthRouters from './AUTH/index';
+import applyUserRouters from './USER/index';
 
 const app = express();
 const port:number = parseInt(process.env.port);
@@ -40,6 +41,7 @@ app.use(function(req, res, next) {
 
 applyMiddleWare(app);
 applyAuthRouters(app);
+applyUserRouters(app);
 
 app.get('/', (req, res) => {
     res.send("hello");

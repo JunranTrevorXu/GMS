@@ -26,7 +26,7 @@ function getUserId(email): Promise<any> {
                 }
                 else {
                     console.log('get user Id succeed: ', results);
-                    resolve({id: results.length > 0 ? results[0].id : null})
+                    resolve({id: results.length > 0 ? results[0].id : null});
                 }
             });
     });
@@ -42,7 +42,7 @@ function login(email, password): Promise<any> {
                 }
                 else {
                     console.log('login succeed: ', results);
-                    resolve({auth: results.length > 0})
+                    resolve({auth: results.length > 0});
                 }
             });
     });
@@ -58,7 +58,7 @@ function logout(userId): Promise<any> {
                 }
                 else {
                     console.log('login succeed: ', results);
-                    resolve()
+                    resolve();
                 }
             });
     });
@@ -104,7 +104,7 @@ function createOnline(userId): Promise<any> {
                 }
                 else {
                     console.log('login succeed: ', results);
-                    resolve()
+                    resolve();
                 }
             });
     });
@@ -120,9 +120,86 @@ function setOnline(userId): Promise<any> {
                 }
                 else {
                     console.log('login succeed: ', results);
-                    resolve()
+                    resolve();
                 }
             });
+    });
+}
+
+function getOnline(userId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select online from ONLINE where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve({online: results.length > 0 ? results[0].online : null});
+                }
+            });
+    });
+}
+
+function sendFriendRequest(fromUserId, toUserId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (${fromUserId}, ${toUserId}, false)`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
+function acceptFriendRequest(fromUserId, toUserId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update FRIEND_REQUEST set viewed = true where fromUserId = ${fromUserId} and toUserId = ${toUserId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
+function addFriend(userAId, userBId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`insert into FRIEND (userAId, userBId) values (${userAId}, ${userBId})`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve();
+                }
+            })
+        .then(() => {
+            mysqlConnection.query(`insert into FRIEND (userAId, userBId) values (${userBId}, ${userAId})`,
+                (error, results) => {
+                    if (error) {
+                        console.log('login error: ', error);
+                        reject(error);
+                    }
+                    else {
+                        console.log('login succeed: ', results);
+                        resolve();
+                    }
+                })
+        })
     });
 }
 
@@ -135,4 +212,7 @@ export {
     setPassword,
     createOnline,
     setOnline,
+    sendFriendRequest,
+    acceptFriendRequest,
+    addFriend,
 };
