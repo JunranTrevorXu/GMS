@@ -17,14 +17,19 @@ router.post('/signin', async(req, res) => {
     }
 
     if (result.auth) {
-        result = await mysqlUser.getUserId(email);
-        await mysqlUser.setOnline(result.id);
-        req.session.encryptedId = result.id;
-        req.session.loggedin = true;
-        res.send({OK: true});
+        try {
+            result = await mysqlUser.getUserId(email);
+            await mysqlUser.setOnline(result.id);
+            req.session.encryptedId = result.id;
+            req.session.loggedin = true;
+            res.send({OK: true});
+        } catch (error) {
+            res.send('/signin 2');
+            return;
+        }
     }
     else {
-        res.send('/signin 2');
+        res.send('/signin 3');
     }
 });
 

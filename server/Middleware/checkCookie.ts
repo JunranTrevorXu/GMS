@@ -24,11 +24,7 @@ function checkCookie(req, res, next) {
 
         // not expired or is login request, pass
         else {
-
-            // if not a login request, reset a field to reset the expire time
-            if (!isLoginRequest(req.originalUrl)) {
-                req.session.spinner = !req.session.spinner;
-            }
+            req.session.spinner = !req.session.spinner;
             next();
         }
     }
