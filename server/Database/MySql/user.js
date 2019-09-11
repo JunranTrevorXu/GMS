@@ -46,6 +46,21 @@ function login(email, password) {
     });
 }
 exports.login = login;
+function logout(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update ONLINE set online = false where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.logout = logout;
 function setNickname(id, nickname) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("update USER set nickname = \"" + nickname + "\" where id = " + id, function (error, result) {
@@ -74,3 +89,33 @@ function setPassword(id, password) {
     });
 }
 exports.setPassword = setPassword;
+function createOnline(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("insert into ONLINE (userId, online) values (" + userId + ", false)", function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.createOnline = createOnline;
+function setOnline(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update ONLINE set online = true where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('login error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('login succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.setOnline = setOnline;

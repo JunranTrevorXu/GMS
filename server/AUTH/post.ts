@@ -17,6 +17,9 @@ router.post('/signin', async(req, res) => {
     }
 
     if (result.auth) {
+        result = await mysqlUser.getUserId(email);
+        await mysqlUser.setOnline(result.id);
+        req.session.encryptedId = result.id;
         req.session.loggedin = true;
         res.send({OK: true});
     }
@@ -36,6 +39,7 @@ router.post('/signup', async (req, res) => {
         const result = await mysqlUser.getUserId(to);
         if (result.id !== null) {
             await sendEmail(to, subject, text);
+            await mysqlUser.createOnline(result.id);
 
             // set encrypted Id for submit register
             req.session.encryptedId = result.id;
@@ -65,13 +69,28 @@ router.post('/signup/submit', async (req, res) => {
     try {
         await mysqlUser.setNickname(id, nickname);
         await mysqlUser.setPassword(id, password);
+        await mysqlUser.setOnline(id);
     } catch (error) {
         res.send('/signup/submit 1');
         return;
     }
 
-    req.session.encryptedId = null;
     req.session.loggedin = true;
+    res.send({OK: true});
+});
+
+router.post('./signout', async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        await mysqlUser.logout(userId);
+    } catch (error) {
+        res.send('/signout 1');
+        return;
+    }
+
+    req.session.encryptedId = null;
+    req.session.loggedin = false;
     res.send({OK: true});
 });
 

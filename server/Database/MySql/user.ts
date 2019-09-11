@@ -48,6 +48,22 @@ function login(email, password): Promise<any> {
     });
 }
 
+function logout(userId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update ONLINE set online = false where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve()
+                }
+            });
+    });
+}
+
 function setNickname(id, nickname): Promise<any> {
     return new Promise<any>((resolve, reject) => {
         mysqlConnection.query(`update USER set nickname = "${nickname}" where id = ${id}`,
@@ -78,10 +94,45 @@ function setPassword(id, password): Promise<any> {
     });
 }
 
+function createOnline(userId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`insert into ONLINE (userId, online) values (${userId}, false)`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve()
+                }
+            });
+    });
+}
+
+function setOnline(userId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update ONLINE set online = true where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('login error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('login succeed: ', results);
+                    resolve()
+                }
+            });
+    });
+}
+
 export {
     createUser,
     getUserId,
     login,
+    logout,
     setNickname,
     setPassword,
+    createOnline,
+    setOnline,
 };
