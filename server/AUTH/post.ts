@@ -85,7 +85,7 @@ router.post('/signup/submit', async (req, res) => {
 });
 
 router.post('./signout', async (req, res) => {
-    const userId = req.body.userId;
+    const userId = req.session.encryptedId;
 
     try {
         await mysqlUser.logout(userId);
