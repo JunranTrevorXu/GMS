@@ -16,6 +16,8 @@ router.post('/signin', async(req, res) => {
         return;
     }
 
+    console.log(result);
+
     if (result.auth) {
         try {
             result = await mysqlUser.getUserId(email);

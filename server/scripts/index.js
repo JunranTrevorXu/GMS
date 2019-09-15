@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 require("dotenv").config();
 var index_1 = require("../Database/MySql/index");
-var user_1 = require("../Database/MySql/user");
+var user = require("../Database/MySql/user");
 index_1["default"].connect(function (error) {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -51,10 +51,10 @@ function main() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_1.getUserId("a@b.com")];
+                case 0: return [4 /*yield*/, user.createOnline(98)];
                 case 1:
                     result = _a.sent();
-                    console.log(result.id);
+                    console.log(result);
                     return [2 /*return*/];
             }
         });

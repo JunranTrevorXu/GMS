@@ -5,6 +5,7 @@ import { store, persistor } from './ReduxStore/index';
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import * as UserService from './ApiService/UserService';
+import NetworkCheck from './ApiService/NetworkCheck';
 
 import Login from './Page/LoginPage/Login';
 import Home from './Page/HomePage/Home';
@@ -48,7 +49,26 @@ class PrivateRouter extends React.Component {
 }
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      network: false
+    };
+  }
+
+  componentWillMount() {
+    NetworkCheck().then((response) => {
+      this.setState({network: true});
+    }, (error) => {
+      this.setState({network: false});
+    })
+  }
+
   render() {
+    if (!this.state.network) {
+      return <NotFound />;
+    }
+
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>

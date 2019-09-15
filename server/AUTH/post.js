@@ -59,6 +59,7 @@ router.post('/signin', function (req, res) { return __awaiter(_this, void 0, voi
                 res.send('/signin 1');
                 return [2 /*return*/];
             case 4:
+                console.log(result);
                 if (!result.auth) return [3 /*break*/, 10];
                 _a.label = 5;
             case 5:

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from "react-redux";
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 
+import * as UserService from '../../ApiService/UserService';
+
 import './Home.scss';
 
 class Home extends React.Component {
@@ -45,9 +47,14 @@ class Home extends React.Component {
 
       console.log(registration);
       await navigator.serviceWorker.ready;
-      const pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
+      let pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
       console.log(JSON.stringify(pushSubscription));
+      pushSubscription = JSON.parse(JSON.stringify(pushSubscription));
+
+      const subscribeResult = await UserService.subscribe(pushSubscription.endpoint, pushSubscription.keys.p256dh, pushSubscription.keys.auth);
+      console.log(subscribeResult);
     } catch (e) {
+      // if permission not granted
       console.log(e);
     }
   }

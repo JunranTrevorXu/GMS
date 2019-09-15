@@ -1,6 +1,6 @@
 require("dotenv").config();
 import mysqlConnection from '../Database/MySql/index';
-import { createUser, getUserId } from "../Database/MySql/user";
+import * as user from "../Database/MySql/user";
 
 mysqlConnection.connect((error) => {
     if (error) {
@@ -12,9 +12,8 @@ mysqlConnection.connect((error) => {
 });
 
 async function main() {
-    //await createUser("a@b.com");
-    const result = await getUserId("a@b.com");
-    console.log(result.id);
+    const result = await user.createOnline(98);
+    console.log(result);
 }
 
 setTimeout(() => main(), 1000);

@@ -203,6 +203,111 @@ function addFriend(userAId, userBId): Promise<any> {
     });
 }
 
+function setEndpoint(endpoint, p256h, auth) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`insert into ENDPOINT (endpoint, p256h, auth) values ("${endpoint}", "${p256h}", "${auth}")`,
+            (error, results) => {
+                if (error) {
+                    console.log('insert error: ', error);
+                    reject(error);
+                } else {
+                    console.log('insert succeed: ', results);
+                    resolve(results.insertId);
+                }
+            });
+    });
+}
+
+function getEndpointId(endpoint) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select id from ENDPOINT where endpoint = "${endpoint}"`,
+            (error, results) => {
+                if (error) {
+                    console.log('select error: ', error);
+                    reject(error);
+                } else {
+                    console.log('select succeed: ', results);
+                    resolve({endpointId: results.length > 0 ? results[0].id : null});
+                }
+            });
+    });
+}
+
+function getEndpoint(endpointId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select * from ENDPOINT where id = ${endpointId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('select error: ', error);
+                    reject(error);
+                } else {
+                    console.log('select succeed: ', results);
+                    resolve(results[0]);
+                }
+            });
+    });
+}
+
+function getSubscribe(userId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select endpointId from USER_SUBSCRIPTION where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('select error: ', error);
+                    reject(error);
+                } else {
+                    console.log('get subscribe succeed: ', results);
+                    resolve(results.length > 0 ? results[0].endpointId : null);
+                }
+            });
+    });
+}
+
+function subscribe(userId, endpointId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`insert into USER_SUBSCRIPTION (userId, endpointId) values (${userId}, ${endpointId})`,
+            (error, results) => {
+                if (error) {
+                    console.log('insert error: ', error);
+                    reject(error);
+                } else {
+                    console.log('insert succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
+function preemptSubscribe(userId, endpointId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update USER_SUBSCRIPTION set userId = ${userId} where endpointId = ${endpointId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('preempt error: ', error);
+                    reject(error);
+                } else {
+                    console.log('preempt succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
+function updateSubscribe(userId, endpointId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update USER_SUBSCRIPTION set endpointId = ${endpointId} where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('update error: ', error);
+                    reject(error);
+                } else {
+                    console.log('update succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
 export {
     createUser,
     getUserId,
@@ -215,4 +320,11 @@ export {
     sendFriendRequest,
     acceptFriendRequest,
     addFriend,
+    setEndpoint,
+    getEndpointId,
+    getEndpoint,
+    getSubscribe,
+    subscribe,
+    preemptSubscribe,
+    updateSubscribe,
 };

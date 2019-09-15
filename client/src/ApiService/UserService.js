@@ -9,13 +9,14 @@ function signin(email, password) {
       password
     }
   };
-  return instance(option)
-    .then(response => {
+  return instance(option).then(
+    response => {
       return response;
-    })
-    .catch(error => {
-      return error;
-    });
+    },
+    error => {
+      throw error;
+    }
+  );
 }
 
 function signup(email) {
@@ -26,13 +27,14 @@ function signup(email) {
       email
     }
   };
-  return instance(option)
-    .then(response => {
+  return instance(option).then(
+    response => {
       return response;
-    })
-    .catch(error => {
-      return error;
-    });
+    },
+    error => {
+      throw error;
+    }
+  );
 }
 
 function submit(nickname, password) {
@@ -44,13 +46,34 @@ function submit(nickname, password) {
       password
     }
   };
-  return instance(option)
-    .then(response => {
+  return instance(option).then(
+    response => {
       return response;
-    })
-    .catch(error => {
-      return error;
-    });
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
+function subscribe(endpoint, p256dh, auth) {
+  const option = {
+    method: "post",
+    url: "/user/subscribe",
+    data: {
+      endpoint,
+      p256dh,
+      auth
+    }
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
 }
 
 function checkAuth() {
@@ -58,13 +81,14 @@ function checkAuth() {
     method: "get",
     url: "/auth"
   };
-  return instance(option)
-    .then(response => {
+  return instance(option).then(
+    response => {
       return response;
-    })
-    .catch(error => {
-      return error;
-    });
+    },
+    error => {
+      throw error;
+    }
+  );
 }
 
-export { signin, signup, submit, checkAuth };
+export { signin, signup, submit, subscribe, checkAuth };

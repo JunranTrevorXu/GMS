@@ -190,3 +190,108 @@ function addFriend(userAId, userBId) {
     });
 }
 exports.addFriend = addFriend;
+function setEndpoint(endpoint, p256h, auth) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("insert into ENDPOINT (endpoint, p256h, auth) values (\"" + endpoint + "\", \"" + p256h + "\", \"" + auth + "\")", function (error, results) {
+            if (error) {
+                console.log('insert error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('insert succeed: ', results);
+                resolve(results.insertId);
+            }
+        });
+    });
+}
+exports.setEndpoint = setEndpoint;
+function getEndpointId(endpoint) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select id from ENDPOINT where endpoint = \"" + endpoint + "\"", function (error, results) {
+            if (error) {
+                console.log('select error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('select succeed: ', results);
+                resolve({ endpointId: results.length > 0 ? results[0].id : null });
+            }
+        });
+    });
+}
+exports.getEndpointId = getEndpointId;
+function getEndpoint(endpointId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select * from ENDPOINT where id = " + endpointId, function (error, results) {
+            if (error) {
+                console.log('select error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('select succeed: ', results);
+                resolve(results[0]);
+            }
+        });
+    });
+}
+exports.getEndpoint = getEndpoint;
+function getSubscribe(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select endpointId from USER_SUBSCRIPTION where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('select error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('get subscribe succeed: ', results);
+                resolve(results.length > 0 ? results[0].endpointId : null);
+            }
+        });
+    });
+}
+exports.getSubscribe = getSubscribe;
+function subscribe(userId, endpointId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("insert into USER_SUBSCRIPTION (userId, endpointId) values (" + userId + ", " + endpointId + ")", function (error, results) {
+            if (error) {
+                console.log('insert error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('insert succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.subscribe = subscribe;
+function preemptSubscribe(userId, endpointId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update USER_SUBSCRIPTION set userId = " + userId + " where endpointId = " + endpointId, function (error, results) {
+            if (error) {
+                console.log('preempt error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('preempt succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.preemptSubscribe = preemptSubscribe;
+function updateSubscribe(userId, endpointId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update USER_SUBSCRIPTION set endpointId = " + endpointId + " where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('update error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('update succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.updateSubscribe = updateSubscribe;

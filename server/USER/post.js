@@ -39,12 +39,12 @@ exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
 var mysqlUser = require("../Database/MySql/user");
-router.post('/sendFriendRequest', function (res, req) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var fromUserId, toUserEmail, toUserId, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                fromUserId = req.session.encrypted;
+                fromUserId = req.session.encryptedId;
                 toUserEmail = req.body.toUserEmail;
                 _a.label = 1;
             case 1:
@@ -67,12 +67,12 @@ router.post('/sendFriendRequest', function (res, req) { return __awaiter(_this, 
         }
     });
 }); });
-router.post('/acceptFriendRequest', function (res, req) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var toUserId, fromUserId, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                toUserId = req.session.encrypted;
+                toUserId = req.session.encryptedId;
                 fromUserId = req.body.fromUserId;
                 _a.label = 1;
             case 1:
@@ -92,6 +92,53 @@ router.post('/acceptFriendRequest', function (res, req) { return __awaiter(_this
                 //web push
                 res.send({ OK: true });
                 return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpointId, _b, error_3;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                userId = req.session.encryptedId;
+                _a = req.body, endpoint = _a.endpoint, p256dh = _a.p256dh, auth = _a.auth;
+                _c.label = 1;
+            case 1:
+                _c.trys.push([1, 12, , 13]);
+                return [4 /*yield*/, mysqlUser.getEndpointId(endpoint)];
+            case 2:
+                endpointId = (_c.sent()).endpointId;
+                if (!!endpointId) return [3 /*break*/, 9];
+                return [4 /*yield*/, mysqlUser.setEndpoint(endpoint, p256dh, auth)];
+            case 3:
+                endpointId = _c.sent();
+                return [4 /*yield*/, mysqlUser.getSubscribe(userId)];
+            case 4:
+                oldEndpointId = _c.sent();
+                if (!oldEndpointId) return [3 /*break*/, 6];
+                return [4 /*yield*/, mysqlUser.updateSubscribe(userId, endpointId)];
+            case 5:
+                _b = _c.sent();
+                return [3 /*break*/, 8];
+            case 6: return [4 /*yield*/, mysqlUser.subscribe(userId, endpointId)];
+            case 7:
+                _b = _c.sent();
+                _c.label = 8;
+            case 8:
+                _b;
+                return [3 /*break*/, 11];
+            case 9: return [4 /*yield*/, mysqlUser.preemptSubscribe(userId, endpointId)];
+            case 10:
+                _c.sent();
+                _c.label = 11;
+            case 11:
+                res.send({ OK: true });
+                return [3 /*break*/, 13];
+            case 12:
+                error_3 = _c.sent();
+                res.send('./subscribe 1');
+                return [3 /*break*/, 13];
+            case 13: return [2 /*return*/];
         }
     });
 }); });
