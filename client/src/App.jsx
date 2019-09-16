@@ -61,7 +61,11 @@ class App extends React.Component {
       this.setState({network: true});
     }, (error) => {
       this.setState({network: false});
-    })
+    });
+
+    window.addEventListener('beforeunload', async (event) => {
+      await UserService.offline();
+    });
   }
 
   render() {

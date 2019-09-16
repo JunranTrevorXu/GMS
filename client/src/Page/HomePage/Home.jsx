@@ -57,6 +57,8 @@ class Home extends React.Component {
       // if permission not granted
       console.log(e);
     }
+
+    await UserService.online();
   }
 
   render() {

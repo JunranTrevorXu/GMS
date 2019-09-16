@@ -34,30 +34,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
-require("dotenv").config();
-var index_1 = require("../Database/MySql/index");
-var user = require("../Database/MySql/user");
-index_1["default"].connect(function (error) {
-    if (error) {
-        console.error('mysql connecting: error' + error.stack);
-    }
-    else {
-        console.log('mysql connected as id ' + index_1["default"].threadId);
-    }
-});
-function main() {
-    return __awaiter(this, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, user.getFriend(98)];
-                case 1:
-                    result = _a.sent();
-                    console.log(result);
-                    return [2 /*return*/];
-            }
-        });
+var express = require('express');
+var router = express.Router();
+var mysqlUser = require("../Database/MySql/user");
+router.get('/friendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, requestList, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.session.encryptedId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, mysqlUser.getFriendRequest(userId)];
+            case 2:
+                requestList = _a.sent();
+                res.send(requestList);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                res.send('/friendRequest 1');
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
     });
-}
-setTimeout(function () { return main(); }, 1000);
+}); });
+router.get('/friend', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/];
+    });
+}); });
+exports["default"] = router;

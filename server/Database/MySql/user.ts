@@ -48,22 +48,6 @@ function login(email, password): Promise<any> {
     });
 }
 
-function logout(userId): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`update ONLINE set online = false where userId = ${userId}`,
-            (error, results) => {
-                if (error) {
-                    console.log('login error: ', error);
-                    reject(error);
-                }
-                else {
-                    console.log('login succeed: ', results);
-                    resolve();
-                }
-            });
-    });
-}
-
 function setNickname(id, nickname): Promise<any> {
     return new Promise<any>((resolve, reject) => {
         mysqlConnection.query(`update USER set nickname = "${nickname}" where id = ${id}`,
@@ -115,11 +99,11 @@ function setOnline(userId): Promise<any> {
         mysqlConnection.query(`update ONLINE set online = true where userId = ${userId}`,
             (error, results) => {
                 if (error) {
-                    console.log('login error: ', error);
+                    console.log('set online error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('login succeed: ', results);
+                    console.log('set online succeed: ', results);
                     resolve();
                 }
             });
@@ -131,12 +115,28 @@ function getOnline(userId): Promise<any> {
         mysqlConnection.query(`select online from ONLINE where userId = ${userId}`,
             (error, results) => {
                 if (error) {
-                    console.log('login error: ', error);
+                    console.log('get online error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('login succeed: ', results);
+                    console.log('get online succeed: ', results);
                     resolve({online: results.length > 0 ? results[0].online : null});
+                }
+            });
+    });
+}
+
+function setOffline(userId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`update ONLINE set online = false where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('set offline error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('set offline succeed: ', results);
+                    resolve();
                 }
             });
     });
@@ -147,11 +147,11 @@ function sendFriendRequest(fromUserId, toUserId): Promise<any> {
         mysqlConnection.query(`insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (${fromUserId}, ${toUserId}, false)`,
             (error, results) => {
                 if (error) {
-                    console.log('login error: ', error);
+                    console.log('send friend request error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('login succeed: ', results);
+                    console.log('send friend request succeed: ', results);
                     resolve();
                 }
             });
@@ -163,12 +163,29 @@ function acceptFriendRequest(fromUserId, toUserId): Promise<any> {
         mysqlConnection.query(`update FRIEND_REQUEST set viewed = true where fromUserId = ${fromUserId} and toUserId = ${toUserId}`,
             (error, results) => {
                 if (error) {
-                    console.log('login error: ', error);
+                    console.log('accept friend request error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('login succeed: ', results);
+                    console.log('accept friend request succeed: ', results);
                     resolve();
+                }
+            });
+    });
+}
+
+function getFriendRequest(toUserId): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select USER.id, USER.nickname from FRIEND_REQUEST inner join USER 
+        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = ${toUserId} and FRIEND_REQUEST.viewed = false`,
+            (error, results) => {
+                if (error) {
+                    console.log('get friend request error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('get friend request succeed: ', results);
+                    resolve(results);
                 }
             });
     });
@@ -179,27 +196,44 @@ function addFriend(userAId, userBId): Promise<any> {
         mysqlConnection.query(`insert into FRIEND (userAId, userBId) values (${userAId}, ${userBId})`,
             (error, results) => {
                 if (error) {
-                    console.log('login error: ', error);
+                    console.log('add friend  error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('login succeed: ', results);
+                    console.log('add friend succeed: ', results);
                     resolve();
                 }
-            })
-        .then(() => {
-            mysqlConnection.query(`insert into FRIEND (userAId, userBId) values (${userBId}, ${userAId})`,
-                (error, results) => {
-                    if (error) {
-                        console.log('login error: ', error);
-                        reject(error);
-                    }
-                    else {
-                        console.log('login succeed: ', results);
-                        resolve();
-                    }
-                })
-        })
+            });
+    }).then(() => {
+        mysqlConnection.query(`insert into FRIEND (userAId, userBId) values (${userBId}, ${userAId})`,
+            (error, results) => {
+                if (error) {
+                    console.log('add friend reverse error: ', error);
+                    throw(error);
+                }
+                else {
+                    console.log('add friend reverse succeed: ', results);
+                    return;
+                }
+            });
+    });
+}
+
+function getFriend(userAId):  Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select USER.id, USER.nickname, ONLINE.online from 
+        FRIEND inner join USER on FRIEND.userBId = USER.id
+        inner join ONLINE on USER.id = ONLINE.userId where FRIEND.userAId = ${userAId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('get friend  error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('get friend succeed: ', results);
+                    resolve(results);
+                }
+            });
     });
 }
 
@@ -233,31 +267,17 @@ function getEndpointId(endpoint) {
     });
 }
 
-function getEndpoint(endpointId) {
-    return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select * from ENDPOINT where id = ${endpointId}`,
-            (error, results) => {
-                if (error) {
-                    console.log('select error: ', error);
-                    reject(error);
-                } else {
-                    console.log('select succeed: ', results);
-                    resolve(results[0]);
-                }
-            });
-    });
-}
-
 function getSubscribe(userId) {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select endpointId from USER_SUBSCRIPTION where userId = ${userId}`,
+        mysqlConnection.query(`select ENDPOINT.endpoint from ENDPOINT inner join USER_SUBSCRIPTION 
+        on ENDPOINT.id = USER_SUBSCRIPTION.endpointId where USER_SUBSCRIPTION.userId = ${userId}`,
             (error, results) => {
                 if (error) {
                     console.log('select error: ', error);
                     reject(error);
                 } else {
                     console.log('get subscribe succeed: ', results);
-                    resolve(results.length > 0 ? results[0].endpointId : null);
+                    resolve(results.length > 0 ? results[0] : null);
                 }
             });
     });
@@ -312,17 +332,19 @@ export {
     createUser,
     getUserId,
     login,
-    logout,
     setNickname,
     setPassword,
     createOnline,
     setOnline,
+    getOnline,
+    setOffline,
     sendFriendRequest,
     acceptFriendRequest,
+    getFriendRequest,
     addFriend,
+    getFriend,
     setEndpoint,
     getEndpointId,
-    getEndpoint,
     getSubscribe,
     subscribe,
     preemptSubscribe,

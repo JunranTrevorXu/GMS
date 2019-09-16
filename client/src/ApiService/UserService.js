@@ -76,6 +76,36 @@ function subscribe(endpoint, p256dh, auth) {
   );
 }
 
+function online() {
+  const option = {
+    method: "post",
+    url: "/auth/online"
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
+function offline() {
+  const option = {
+    method: "post",
+    url: "/auth/offline"
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
 function checkAuth() {
   const option = {
     method: "get",
@@ -91,4 +121,4 @@ function checkAuth() {
   );
 }
 
-export { signin, signup, submit, subscribe, checkAuth };
+export { signin, signup, submit, subscribe, online, offline, checkAuth };

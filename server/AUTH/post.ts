@@ -21,7 +21,6 @@ router.post('/signin', async(req, res) => {
     if (result.auth) {
         try {
             result = await mysqlUser.getUserId(email);
-            await mysqlUser.setOnline(result.id);
             req.session.encryptedId = result.id;
             req.session.loggedin = true;
             res.send({OK: true});
@@ -76,7 +75,6 @@ router.post('/signup/submit', async (req, res) => {
     try {
         await mysqlUser.setNickname(id, nickname);
         await mysqlUser.setPassword(id, password);
-        await mysqlUser.setOnline(id);
     } catch (error) {
         res.send('/signup/submit 1');
         return;
@@ -86,11 +84,11 @@ router.post('/signup/submit', async (req, res) => {
     res.send({OK: true});
 });
 
-router.post('./signout', async (req, res) => {
+router.post('/signout', async (req, res) => {
     const userId = req.session.encryptedId;
 
     try {
-        await mysqlUser.logout(userId);
+        await mysqlUser.setOffline(userId);
     } catch (error) {
         res.send('/signout 1');
         return;
@@ -98,6 +96,30 @@ router.post('./signout', async (req, res) => {
 
     req.session.encryptedId = null;
     req.session.loggedin = false;
+    res.send({OK: true});
+});
+
+router.post('/online', async (req, res) => {
+    const userId = req.session.encryptedId;
+
+    try {
+        await mysqlUser.setOnline(userId);
+    } catch (error) {
+        res.send('/online 1');
+        return;
+    }
+    res.send({OK: true});
+});
+
+router.post('/offline', async (req, res) => {
+    const userId = req.session.encryptedId;
+
+    try {
+        await mysqlUser.setOffline(userId);
+    } catch (error) {
+        res.send('/offline 1');
+        return;
+    }
     res.send({OK: true});
 });
 

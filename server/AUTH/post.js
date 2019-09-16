@@ -60,29 +60,26 @@ router.post('/signin', function (req, res) { return __awaiter(_this, void 0, voi
                 return [2 /*return*/];
             case 4:
                 console.log(result);
-                if (!result.auth) return [3 /*break*/, 10];
+                if (!result.auth) return [3 /*break*/, 9];
                 _a.label = 5;
             case 5:
-                _a.trys.push([5, 8, , 9]);
+                _a.trys.push([5, 7, , 8]);
                 return [4 /*yield*/, mysqlUser.getUserId(email)];
             case 6:
                 result = _a.sent();
-                return [4 /*yield*/, mysqlUser.setOnline(result.id)];
-            case 7:
-                _a.sent();
                 req.session.encryptedId = result.id;
                 req.session.loggedin = true;
                 res.send({ OK: true });
-                return [3 /*break*/, 9];
-            case 8:
+                return [3 /*break*/, 8];
+            case 7:
                 error_2 = _a.sent();
                 res.send('/signin 2');
                 return [2 /*return*/];
-            case 9: return [3 /*break*/, 11];
-            case 10:
+            case 8: return [3 /*break*/, 10];
+            case 9:
                 res.send('/signin 3');
-                _a.label = 11;
-            case 11: return [2 /*return*/];
+                _a.label = 10;
+            case 10: return [2 /*return*/];
         }
     });
 }); });
@@ -145,29 +142,26 @@ router.post('/signup/submit', function (req, res) { return __awaiter(_this, void
                 password = req.body.password;
                 _a.label = 1;
             case 1:
-                _a.trys.push([1, 5, , 6]);
+                _a.trys.push([1, 4, , 5]);
                 return [4 /*yield*/, mysqlUser.setNickname(id, nickname)];
             case 2:
                 _a.sent();
                 return [4 /*yield*/, mysqlUser.setPassword(id, password)];
             case 3:
                 _a.sent();
-                return [4 /*yield*/, mysqlUser.setOnline(id)];
+                return [3 /*break*/, 5];
             case 4:
-                _a.sent();
-                return [3 /*break*/, 6];
-            case 5:
                 error_4 = _a.sent();
                 res.send('/signup/submit 1');
                 return [2 /*return*/];
-            case 6:
+            case 5:
                 req.session.loggedin = true;
                 res.send({ OK: true });
                 return [2 /*return*/];
         }
     });
 }); });
-router.post('./signout', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/signout', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var userId, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -176,7 +170,7 @@ router.post('./signout', function (req, res) { return __awaiter(_this, void 0, v
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, mysqlUser.logout(userId)];
+                return [4 /*yield*/, mysqlUser.setOffline(userId)];
             case 2:
                 _a.sent();
                 return [3 /*break*/, 4];
@@ -187,6 +181,52 @@ router.post('./signout', function (req, res) { return __awaiter(_this, void 0, v
             case 4:
                 req.session.encryptedId = null;
                 req.session.loggedin = false;
+                res.send({ OK: true });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/online', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, error_6;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.session.encryptedId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, mysqlUser.setOnline(userId)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_6 = _a.sent();
+                res.send('/online 1');
+                return [2 /*return*/];
+            case 4:
+                res.send({ OK: true });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.post('/offline', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, error_7;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.session.encryptedId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, mysqlUser.setOffline(userId)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                error_7 = _a.sent();
+                res.send('/offline 1');
+                return [2 /*return*/];
+            case 4:
                 res.send({ OK: true });
                 return [2 /*return*/];
         }

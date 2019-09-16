@@ -46,21 +46,6 @@ function login(email, password) {
     });
 }
 exports.login = login;
-function logout(userId) {
-    return new Promise(function (resolve, reject) {
-        index_1["default"].query("update ONLINE set online = false where userId = " + userId, function (error, results) {
-            if (error) {
-                console.log('login error: ', error);
-                reject(error);
-            }
-            else {
-                console.log('login succeed: ', results);
-                resolve();
-            }
-        });
-    });
-}
-exports.logout = logout;
 function setNickname(id, nickname) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("update USER set nickname = \"" + nickname + "\" where id = " + id, function (error, result) {
@@ -108,11 +93,11 @@ function setOnline(userId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("update ONLINE set online = true where userId = " + userId, function (error, results) {
             if (error) {
-                console.log('login error: ', error);
+                console.log('set online error: ', error);
                 reject(error);
             }
             else {
-                console.log('login succeed: ', results);
+                console.log('set online succeed: ', results);
                 resolve();
             }
         });
@@ -123,25 +108,41 @@ function getOnline(userId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("select online from ONLINE where userId = " + userId, function (error, results) {
             if (error) {
-                console.log('login error: ', error);
+                console.log('get online error: ', error);
                 reject(error);
             }
             else {
-                console.log('login succeed: ', results);
+                console.log('get online succeed: ', results);
                 resolve({ online: results.length > 0 ? results[0].online : null });
             }
         });
     });
 }
+exports.getOnline = getOnline;
+function setOffline(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("update ONLINE set online = false where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('set offline error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('set offline succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.setOffline = setOffline;
 function sendFriendRequest(fromUserId, toUserId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (" + fromUserId + ", " + toUserId + ", false)", function (error, results) {
             if (error) {
-                console.log('login error: ', error);
+                console.log('send friend request error: ', error);
                 reject(error);
             }
             else {
-                console.log('login succeed: ', results);
+                console.log('send friend request succeed: ', results);
                 resolve();
             }
         });
@@ -152,44 +153,73 @@ function acceptFriendRequest(fromUserId, toUserId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("update FRIEND_REQUEST set viewed = true where fromUserId = " + fromUserId + " and toUserId = " + toUserId, function (error, results) {
             if (error) {
-                console.log('login error: ', error);
+                console.log('accept friend request error: ', error);
                 reject(error);
             }
             else {
-                console.log('login succeed: ', results);
+                console.log('accept friend request succeed: ', results);
                 resolve();
             }
         });
     });
 }
 exports.acceptFriendRequest = acceptFriendRequest;
+function getFriendRequest(toUserId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select USER.id, USER.nickname from FRIEND_REQUEST inner join USER \n        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = " + toUserId + " and FRIEND_REQUEST.viewed = false", function (error, results) {
+            if (error) {
+                console.log('get friend request error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('get friend request succeed: ', results);
+                resolve(results);
+            }
+        });
+    });
+}
+exports.getFriendRequest = getFriendRequest;
 function addFriend(userAId, userBId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("insert into FRIEND (userAId, userBId) values (" + userAId + ", " + userBId + ")", function (error, results) {
             if (error) {
-                console.log('login error: ', error);
+                console.log('add friend  error: ', error);
                 reject(error);
             }
             else {
-                console.log('login succeed: ', results);
+                console.log('add friend succeed: ', results);
                 resolve();
             }
-        })
-            .then(function () {
-            index_1["default"].query("insert into FRIEND (userAId, userBId) values (" + userBId + ", " + userAId + ")", function (error, results) {
-                if (error) {
-                    console.log('login error: ', error);
-                    reject(error);
-                }
-                else {
-                    console.log('login succeed: ', results);
-                    resolve();
-                }
-            });
+        });
+    }).then(function () {
+        index_1["default"].query("insert into FRIEND (userAId, userBId) values (" + userBId + ", " + userAId + ")", function (error, results) {
+            if (error) {
+                console.log('add friend reverse error: ', error);
+                throw (error);
+            }
+            else {
+                console.log('add friend reverse succeed: ', results);
+                return;
+            }
         });
     });
 }
 exports.addFriend = addFriend;
+function getFriend(userAId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select USER.id, USER.nickname, ONLINE.online from \n        FRIEND inner join USER on FRIEND.userBId = USER.id\n        inner join ONLINE on USER.id = ONLINE.userId where FRIEND.userAId = " + userAId, function (error, results) {
+            if (error) {
+                console.log('get friend  error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('get friend succeed: ', results);
+                resolve(results);
+            }
+        });
+    });
+}
+exports.getFriend = getFriend;
 function setEndpoint(endpoint, p256h, auth) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("insert into ENDPOINT (endpoint, p256h, auth) values (\"" + endpoint + "\", \"" + p256h + "\", \"" + auth + "\")", function (error, results) {
@@ -220,31 +250,16 @@ function getEndpointId(endpoint) {
     });
 }
 exports.getEndpointId = getEndpointId;
-function getEndpoint(endpointId) {
-    return new Promise(function (resolve, reject) {
-        index_1["default"].query("select * from ENDPOINT where id = " + endpointId, function (error, results) {
-            if (error) {
-                console.log('select error: ', error);
-                reject(error);
-            }
-            else {
-                console.log('select succeed: ', results);
-                resolve(results[0]);
-            }
-        });
-    });
-}
-exports.getEndpoint = getEndpoint;
 function getSubscribe(userId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select endpointId from USER_SUBSCRIPTION where userId = " + userId, function (error, results) {
+        index_1["default"].query("select ENDPOINT.endpoint from ENDPOINT inner join USER_SUBSCRIPTION \n        on ENDPOINT.id = USER_SUBSCRIPTION.endpointId where USER_SUBSCRIPTION.userId = " + userId, function (error, results) {
             if (error) {
                 console.log('select error: ', error);
                 reject(error);
             }
             else {
                 console.log('get subscribe succeed: ', results);
-                resolve(results.length > 0 ? results[0].endpointId : null);
+                resolve(results.length > 0 ? results[0] : null);
             }
         });
     });
