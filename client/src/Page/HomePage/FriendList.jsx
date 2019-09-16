@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import * as UserService from '../../ApiService/UserService';
 
-class Misc extends React.Component {
+class FriendList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -20,4 +20,4 @@ const mapStateToProps = (state) => ({
 export default connect(
   mapStateToProps,
   null
-)(Misc);
+)(FriendList);

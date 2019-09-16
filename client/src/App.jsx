@@ -24,7 +24,6 @@ class PrivateRouter extends React.Component {
 
   async componentDidMount() {
     const response = await UserService.checkAuth();
-    console.log(response);
     this.setState({loading: false, auth: response.data.isLoggedIn});
   }
 

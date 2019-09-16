@@ -9,6 +9,9 @@ import './Home.scss';
 class Home extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+
+    }
   }
 
   askPermission() {
@@ -52,7 +55,6 @@ class Home extends React.Component {
       pushSubscription = JSON.parse(JSON.stringify(pushSubscription));
 
       const subscribeResult = await UserService.subscribe(pushSubscription.endpoint, pushSubscription.keys.p256dh, pushSubscription.keys.auth);
-      console.log(subscribeResult);
     } catch (e) {
       // if permission not granted
       console.log(e);
@@ -65,9 +67,9 @@ class Home extends React.Component {
     return (
         <Grid className='gridContainer'>
           <Row className='rowContainer'>
+            <Cell columns={1} className='settingsContainer'></Cell>
             <Cell columns={3} className='friendListContainer'></Cell>
             <Cell columns={8} className='chatContainer'></Cell>
-            <Cell columns={1} className='settingsContainer'></Cell>
           </Row>
         </Grid>
     )
