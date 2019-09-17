@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from "react-redux";
 import {Cell, Grid, Row} from '@material/react-layout-grid';
+import Misc from './Misc';
 
 import * as UserService from '../../ApiService/UserService';
 
@@ -67,7 +68,9 @@ class Home extends React.Component {
     return (
         <Grid className='gridContainer'>
           <Row className='rowContainer'>
-            <Cell columns={1} className='settingsContainer'></Cell>
+            <Cell columns={1} className='settingsContainer'>
+              <Misc />
+            </Cell>
             <Cell columns={3} className='friendListContainer'></Cell>
             <Cell columns={8} className='chatContainer'></Cell>
           </Row>
