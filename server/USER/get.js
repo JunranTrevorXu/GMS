@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,12 +34,35 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
 var mysqlUser = require("../Database/MySql/user");
-router.get('/friendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, requestList, error_1;
+router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, result, error_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.session.encryptedId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, mysqlUser.getUserInfo(userId)];
+            case 2:
+                result = _a.sent();
+                res.send({ OK: true, email: result.email, nickname: result.nickname });
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _a.sent();
+                res.send('/ 1');
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); });
+router.get('/friendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userId, requestList, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -51,19 +73,36 @@ router.get('/friendRequest', function (req, res) { return __awaiter(void 0, void
                 return [4 /*yield*/, mysqlUser.getFriendRequest(userId)];
             case 2:
                 requestList = _a.sent();
-                res.send(requestList);
+                res.send({ OK: true, requestList: requestList });
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _a.sent();
+                error_2 = _a.sent();
                 res.send('/friendRequest 1');
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
     });
 }); });
-router.get('/friend', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get('/friend', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+    var userAId, friendList, error_3;
     return __generator(this, function (_a) {
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                userAId = req.session.encryptedId;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, mysqlUser.getFriend(userAId)];
+            case 2:
+                friendList = _a.sent();
+                res.send({ OK: true, friendList: friendList });
+                return [3 /*break*/, 4];
+            case 3:
+                error_3 = _a.sent();
+                res.send('/friend 1');
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
     });
 }); });
 exports["default"] = router;

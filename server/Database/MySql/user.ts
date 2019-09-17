@@ -32,6 +32,22 @@ function getUserId(email): Promise<any> {
     });
 }
 
+function getUserInfo(id):  Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select email, nickname from USER where id = "${id}"`,
+            (error, results) => {
+                if (error) {
+                    console.log('get user info error: ', error);
+                    reject(error);
+                }
+                else {
+                    console.log('get user info succeed: ', results);
+                    resolve(results.length > 0 ? results[0] : null);
+                }
+            });
+    });
+}
+
 function login(email, password): Promise<any> {
     return new Promise<any>((resolve, reject) => {
         mysqlConnection.query(`select id from USER where email = "${email}" and password = "${password}"`,
@@ -331,6 +347,7 @@ function updateSubscribe(userId, endpointId) {
 export {
     createUser,
     getUserId,
+    getUserInfo,
     login,
     setNickname,
     setPassword,

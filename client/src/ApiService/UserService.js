@@ -106,6 +106,51 @@ function offline() {
   );
 }
 
+function getUserInfo() {
+  const option = {
+    method: "get",
+    url: "/user"
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
+function getFriendRequest() {
+  const option = {
+    method: "get",
+    url: "/user/friendRequest"
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
+function getFriend() {
+  const option = {
+    method: "get",
+    url: "/user/friend"
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
 function checkAuth() {
   const option = {
     method: "get",
@@ -121,4 +166,15 @@ function checkAuth() {
   );
 }
 
-export { signin, signup, submit, subscribe, online, offline, checkAuth };
+export {
+  signin,
+  signup,
+  submit,
+  subscribe,
+  online,
+  offline,
+  getUserInfo,
+  getFriendRequest,
+  getFriend,
+  checkAuth
+};

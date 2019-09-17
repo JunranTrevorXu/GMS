@@ -51,7 +51,7 @@ function main() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user.getFriend(98)];
+                case 0: return [4 /*yield*/, user.getUserInfo(98)];
                 case 1:
                     result = _a.sent();
                     console.log(result);

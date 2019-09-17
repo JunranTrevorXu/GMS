@@ -31,6 +31,21 @@ function getUserId(email) {
     });
 }
 exports.getUserId = getUserId;
+function getUserInfo(id) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select email, nickname from USER where id = \"" + id + "\"", function (error, results) {
+            if (error) {
+                console.log('get user info error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('get user info succeed: ', results);
+                resolve(results.length > 0 ? results[0] : null);
+            }
+        });
+    });
+}
+exports.getUserInfo = getUserInfo;
 function login(email, password) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("select id from USER where email = \"" + email + "\" and password = \"" + password + "\"", function (error, results) {

@@ -12,7 +12,7 @@ mysqlConnection.connect((error) => {
 });
 
 async function main() {
-    const result = await user.getFriend(98);
+    const result = await user.getUserInfo(98);
     console.log(result);
 }
 

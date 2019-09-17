@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 import Misc from './Misc';
 
+import UserActions from '../../ReduxStore/User/Actions';
 import * as UserService from '../../ApiService/UserService';
 
 import './Home.scss';
@@ -11,7 +12,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      tab: 'friendList'
     }
   }
 
@@ -62,6 +63,10 @@ class Home extends React.Component {
     }
 
     await UserService.online();
+
+    this.props.getUserInfo();
+    this.props.getFriend();
+    this.props.getFriendRequest();
   }
 
   render() {
@@ -69,7 +74,10 @@ class Home extends React.Component {
         <Grid className='gridContainer'>
           <Row className='rowContainer'>
             <Cell columns={1} className='settingsContainer'>
-              <Misc />
+              <Misc
+                tab={this.state.tab}
+                selectTab={(tab) => this.setState({ tab })}
+              />
             </Cell>
             <Cell columns={3} className='friendListContainer'></Cell>
             <Cell columns={8} className='chatContainer'></Cell>
@@ -83,7 +91,13 @@ const mapStateToProps = (state) => ({
   user: state.user.toJS(),
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  getUserInfo: () => dispatch(UserActions.getUserInfo()),
+  getFriend: () => dispatch(UserActions.getFriend()),
+  getFriendRequest: () => dispatch(UserActions.getFriendRequest())
+});
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Home);

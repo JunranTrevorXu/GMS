@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,11 +34,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
 var mysqlUser = require("../Database/MySql/user");
-router.post('/sendFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var fromUserId, toUserEmail, toUserId, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -67,7 +67,7 @@ router.post('/sendFriendRequest', function (req, res) { return __awaiter(void 0,
         }
     });
 }); });
-router.post('/acceptFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var toUserId, fromUserId, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -95,7 +95,7 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(void 
         }
     });
 }); });
-router.post('/subscribe', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpointId, _b, error_3;
     return __generator(this, function (_c) {
         switch (_c.label) {
