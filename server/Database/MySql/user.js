@@ -325,3 +325,18 @@ function updateSubscribe(userId, endpointId) {
     });
 }
 exports.updateSubscribe = updateSubscribe;
+function checkEndpointOccupation(endpointId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("select * from USER_SUBSCRIPTION where endpointId = " + endpointId, function (error, results) {
+            if (error) {
+                console.log('check error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('check succeed: ', results);
+                resolve(results.length > 0);
+            }
+        });
+    });
+}
+exports.checkEndpointOccupation = checkEndpointOccupation;

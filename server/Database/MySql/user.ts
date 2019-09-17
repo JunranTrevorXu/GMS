@@ -344,6 +344,21 @@ function updateSubscribe(userId, endpointId) {
     });
 }
 
+function checkEndpointOccupation(endpointId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`select * from USER_SUBSCRIPTION where endpointId = ${endpointId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('check error: ', error);
+                    reject(error);
+                } else {
+                    console.log('check succeed: ', results);
+                    resolve(results.length > 0);
+                }
+            });
+    });
+}
+
 export {
     createUser,
     getUserId,
@@ -366,4 +381,5 @@ export {
     subscribe,
     preemptSubscribe,
     updateSubscribe,
+    checkEndpointOccupation,
 };

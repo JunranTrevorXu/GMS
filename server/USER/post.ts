@@ -50,7 +50,11 @@ router.post('/subscribe', async (req, res) => {
                 : await mysqlUser.subscribe(userId, endpointId);
         }
         else {
-            await mysqlUser.preemptSubscribe(userId, endpointId);
+            const occupied = await mysqlUser.checkEndpointOccupation(endpointId);
+            if (occupied)
+                await mysqlUser.preemptSubscribe(userId, endpointId);
+            else
+                await mysqlUser.subscribe(userId, endpointId);
         }
         res.send({OK: true});
     } catch (error) {

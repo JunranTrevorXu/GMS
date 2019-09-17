@@ -96,7 +96,7 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this
     });
 }); });
 router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpointId, _b, error_3;
+    var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpointId, _b, occupied, error_3;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
@@ -104,7 +104,7 @@ router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, 
                 _a = req.body, endpoint = _a.endpoint, p256dh = _a.p256dh, auth = _a.auth;
                 _c.label = 1;
             case 1:
-                _c.trys.push([1, 12, , 13]);
+                _c.trys.push([1, 15, , 16]);
                 return [4 /*yield*/, mysqlUser.getEndpointId(endpoint)];
             case 2:
                 endpointId = (_c.sent()).endpointId;
@@ -126,19 +126,27 @@ router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, 
                 _c.label = 8;
             case 8:
                 _b;
-                return [3 /*break*/, 11];
-            case 9: return [4 /*yield*/, mysqlUser.preemptSubscribe(userId, endpointId)];
+                return [3 /*break*/, 14];
+            case 9: return [4 /*yield*/, mysqlUser.checkEndpointOccupation(endpointId)];
             case 10:
-                _c.sent();
-                _c.label = 11;
+                occupied = _c.sent();
+                if (!occupied) return [3 /*break*/, 12];
+                return [4 /*yield*/, mysqlUser.preemptSubscribe(userId, endpointId)];
             case 11:
+                _c.sent();
+                return [3 /*break*/, 14];
+            case 12: return [4 /*yield*/, mysqlUser.subscribe(userId, endpointId)];
+            case 13:
+                _c.sent();
+                _c.label = 14;
+            case 14:
                 res.send({ OK: true });
-                return [3 /*break*/, 13];
-            case 12:
+                return [3 /*break*/, 16];
+            case 15:
                 error_3 = _c.sent();
                 res.send('./subscribe 1');
-                return [3 /*break*/, 13];
-            case 13: return [2 /*return*/];
+                return [3 /*break*/, 16];
+            case 16: return [2 /*return*/];
         }
     });
 }); });
