@@ -38,58 +38,99 @@ var _this = this;
 exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
+var webpush_1 = require("../Service/webpush");
 var mysqlUser = require("../Database/MySql/user");
 router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var fromUserId, toUserEmail, toUserId, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var fromUserId, toUserEmail, toUserId, subscribeData, pushSubscriptionObj, toUserInfo, payloadObj, _a, error_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 fromUserId = req.session.encryptedId;
                 toUserEmail = req.body.toUserEmail;
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 4, , 5]);
+                _b.trys.push([1, 7, , 8]);
                 return [4 /*yield*/, mysqlUser.getUserId(toUserEmail)];
             case 2:
-                toUserId = _a.sent();
+                toUserId = _b.sent();
                 return [4 /*yield*/, mysqlUser.sendFriendRequest(fromUserId, toUserId)];
             case 3:
-                _a.sent();
-                return [3 /*break*/, 5];
+                _b.sent();
+                return [4 /*yield*/, mysqlUser.getSubscribe(toUserId)];
             case 4:
-                error_1 = _a.sent();
+                subscribeData = _b.sent();
+                pushSubscriptionObj = {
+                    endpoint: subscribeData.endpoint,
+                    keys: {
+                        auth: subscribeData.auth,
+                        p256dh: subscribeData.p256h
+                    }
+                };
+                return [4 /*yield*/, mysqlUser.getUserInfo(toUserId)];
+            case 5:
+                toUserInfo = _b.sent();
+                _a = {};
+                return [4 /*yield*/, mysqlUser.getOnline(toUserId)];
+            case 6:
+                payloadObj = (_a.notification = !(_b.sent()),
+                    _a.message = 'New friend request',
+                    _a.nickname = toUserInfo.nickname,
+                    _a);
+                webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
+                return [3 /*break*/, 8];
+            case 7:
+                error_1 = _b.sent();
                 res.send('./sendFriendRequest 1');
                 return [2 /*return*/];
-            case 5:
-                //web push
+            case 8:
                 res.send({ OK: true });
                 return [2 /*return*/];
         }
     });
 }); });
 router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var toUserId, fromUserId, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var toUserId, fromUserId, subscribeData, pushSubscriptionObj, fromUserInfo, payloadObj, _a, error_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 toUserId = req.session.encryptedId;
                 fromUserId = req.body.fromUserId;
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 4, , 5]);
+                _b.trys.push([1, 7, , 8]);
                 return [4 /*yield*/, mysqlUser.acceptFriendRequest(fromUserId, toUserId)];
             case 2:
-                _a.sent();
+                _b.sent();
                 return [4 /*yield*/, mysqlUser.addFriend(fromUserId, toUserId)];
             case 3:
-                _a.sent();
-                return [3 /*break*/, 5];
+                _b.sent();
+                return [4 /*yield*/, mysqlUser.getSubscribe(fromUserId)];
             case 4:
-                error_2 = _a.sent();
-                res.send('./acceptFriendRequest 1');
-                return [3 /*break*/, 5];
+                subscribeData = _b.sent();
+                pushSubscriptionObj = {
+                    endpoint: subscribeData.endpoint,
+                    keys: {
+                        auth: subscribeData.auth,
+                        p256dh: subscribeData.p256h
+                    }
+                };
+                return [4 /*yield*/, mysqlUser.getUserInfo(fromUserId)];
             case 5:
-                //web push
+                fromUserInfo = _b.sent();
+                _a = {};
+                return [4 /*yield*/, mysqlUser.getOnline(fromUserId)];
+            case 6:
+                payloadObj = (_a.notification = !(_b.sent()),
+                    _a.message = 'Friend request accepted',
+                    _a.nickname = fromUserInfo.nickname,
+                    _a);
+                webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
+                return [3 /*break*/, 8];
+            case 7:
+                error_2 = _b.sent();
+                res.send('./acceptFriendRequest 1');
+                return [3 /*break*/, 8];
+            case 8:
                 res.send({ OK: true });
                 return [2 /*return*/];
         }

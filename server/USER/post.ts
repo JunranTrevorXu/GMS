@@ -53,11 +53,11 @@ router.post('/acceptFriendRequest', async (req, res) => {
                 p256dh: subscribeData.p256h,
             }
         };
-        const fromUserInfo = await mysqlUser.getUserInfo(fromUserId);
+        const toUserInfo = await mysqlUser.getUserInfo(toUserId);
         const payloadObj = {
             notification: !(await mysqlUser.getOnline(fromUserId)),
                 message: 'Friend request accepted',
-            nickname: fromUserInfo.nickname
+            nickname: toUserInfo.nickname
         };
         webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
     } catch (error) {

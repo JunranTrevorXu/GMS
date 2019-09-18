@@ -128,7 +128,7 @@ function getOnline(userId) {
             }
             else {
                 console.log('get online succeed: ', results);
-                resolve({ online: results.length > 0 ? results[0].online : null });
+                resolve(results.length > 0 ? results[0].online : null);
             }
         });
     });
