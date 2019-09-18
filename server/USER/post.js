@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -34,12 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
 var mysqlUser = require("../Database/MySql/user");
-router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/sendFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var fromUserId, toUserEmail, toUserId, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -67,7 +67,7 @@ router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, 
         }
     });
 }); });
-router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/acceptFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var toUserId, fromUserId, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -95,58 +95,75 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this
         }
     });
 }); });
-router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpointId, _b, occupied, error_3;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+router.post('/subscribe', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpoint, occupied, error_3;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 userId = req.session.encryptedId;
                 _a = req.body, endpoint = _a.endpoint, p256dh = _a.p256dh, auth = _a.auth;
-                _c.label = 1;
+                _b.label = 1;
             case 1:
-                _c.trys.push([1, 15, , 16]);
+                _b.trys.push([1, 16, , 17]);
                 return [4 /*yield*/, mysqlUser.getEndpointId(endpoint)];
             case 2:
-                endpointId = (_c.sent()).endpointId;
-                if (!!endpointId) return [3 /*break*/, 9];
-                return [4 /*yield*/, mysqlUser.setEndpoint(endpoint, p256dh, auth)];
-            case 3:
-                endpointId = _c.sent();
+                endpointId = (_b.sent()).endpointId;
                 return [4 /*yield*/, mysqlUser.getSubscribe(userId)];
+            case 3:
+                oldEndpoint = _b.sent();
+                if (!!endpointId) return [3 /*break*/, 5];
+                return [4 /*yield*/, mysqlUser.setEndpoint(endpoint, p256dh, auth)];
             case 4:
-                oldEndpointId = _c.sent();
-                if (!oldEndpointId) return [3 /*break*/, 6];
-                return [4 /*yield*/, mysqlUser.updateSubscribe(userId, endpointId)];
+                endpointId = _b.sent();
+                _b.label = 5;
             case 5:
-                _b = _c.sent();
-                return [3 /*break*/, 8];
-            case 6: return [4 /*yield*/, mysqlUser.subscribe(userId, endpointId)];
+                // no action needed
+                if (oldEndpoint && endpointId == oldEndpoint.id) {
+                    res.send({ OK: true });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, mysqlUser.checkEndpointOccupation(endpointId)];
+            case 6:
+                occupied = _b.sent();
+                if (!!occupied) return [3 /*break*/, 11];
+                if (!oldEndpoint) return [3 /*break*/, 8];
+                // update old subscribe
+                return [4 /*yield*/, mysqlUser.updateSubscribe(userId, endpointId)];
             case 7:
-                _b = _c.sent();
-                _c.label = 8;
-            case 8:
-                _b;
-                return [3 /*break*/, 14];
-            case 9: return [4 /*yield*/, mysqlUser.checkEndpointOccupation(endpointId)];
-            case 10:
-                occupied = _c.sent();
-                if (!occupied) return [3 /*break*/, 12];
-                return [4 /*yield*/, mysqlUser.preemptSubscribe(userId, endpointId)];
+                // update old subscribe
+                _b.sent();
+                return [3 /*break*/, 10];
+            case 8: 
+            // create new subscribe
+            return [4 /*yield*/, mysqlUser.subscribe(userId, endpointId)];
+            case 9:
+                // create new subscribe
+                _b.sent();
+                _b.label = 10;
+            case 10: return [3 /*break*/, 15];
             case 11:
-                _c.sent();
-                return [3 /*break*/, 14];
-            case 12: return [4 /*yield*/, mysqlUser.subscribe(userId, endpointId)];
-            case 13:
-                _c.sent();
-                _c.label = 14;
+                if (!oldEndpoint) return [3 /*break*/, 13];
+                // remove old subscribe
+                return [4 /*yield*/, mysqlUser.removeSubscribe(userId)];
+            case 12:
+                // remove old subscribe
+                _b.sent();
+                _b.label = 13;
+            case 13: 
+            // preempt other's subscribe
+            return [4 /*yield*/, mysqlUser.preemptSubscribe(userId, endpointId)];
             case 14:
-                res.send({ OK: true });
-                return [3 /*break*/, 16];
-            case 15:
-                error_3 = _c.sent();
+                // preempt other's subscribe
+                _b.sent();
+                _b.label = 15;
+            case 15: return [3 /*break*/, 17];
+            case 16:
+                error_3 = _b.sent();
                 res.send('./subscribe 1');
-                return [3 /*break*/, 16];
-            case 16: return [2 /*return*/];
+                return [3 /*break*/, 17];
+            case 17:
+                res.send({ OK: true });
+                return [2 /*return*/];
         }
     });
 }); });

@@ -181,7 +181,7 @@ function acceptFriendRequest(fromUserId, toUserId) {
 exports.acceptFriendRequest = acceptFriendRequest;
 function getFriendRequest(toUserId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select USER.id, USER.nickname from FRIEND_REQUEST inner join USER \n        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = " + toUserId + " and FRIEND_REQUEST.viewed = false", function (error, results) {
+        index_1["default"].query("select USER.id, USER.nickname, USER.email from FRIEND_REQUEST inner join USER \n        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = " + toUserId + " and FRIEND_REQUEST.viewed = false", function (error, results) {
             if (error) {
                 console.log('get friend request error: ', error);
                 reject(error);
@@ -222,7 +222,7 @@ function addFriend(userAId, userBId) {
 exports.addFriend = addFriend;
 function getFriend(userAId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select USER.id, USER.nickname, ONLINE.online from \n        FRIEND inner join USER on FRIEND.userBId = USER.id\n        inner join ONLINE on USER.id = ONLINE.userId where FRIEND.userAId = " + userAId, function (error, results) {
+        index_1["default"].query("select USER.id, USER.nickname, USER.email, ONLINE.online from \n        FRIEND inner join USER on FRIEND.userBId = USER.id\n        inner join ONLINE on USER.id = ONLINE.userId where FRIEND.userAId = " + userAId, function (error, results) {
             if (error) {
                 console.log('get friend  error: ', error);
                 reject(error);
@@ -239,11 +239,11 @@ function setEndpoint(endpoint, p256h, auth) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("insert into ENDPOINT (endpoint, p256h, auth) values (\"" + endpoint + "\", \"" + p256h + "\", \"" + auth + "\")", function (error, results) {
             if (error) {
-                console.log('insert error: ', error);
+                console.log('set endpoint error: ', error);
                 reject(error);
             }
             else {
-                console.log('insert succeed: ', results);
+                console.log('set endpoint succeed: ', results);
                 resolve(results.insertId);
             }
         });
@@ -254,11 +254,11 @@ function getEndpointId(endpoint) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("select id from ENDPOINT where endpoint = \"" + endpoint + "\"", function (error, results) {
             if (error) {
-                console.log('select error: ', error);
+                console.log('get endpointId error: ', error);
                 reject(error);
             }
             else {
-                console.log('select succeed: ', results);
+                console.log('get endpointId succeed: ', results);
                 resolve({ endpointId: results.length > 0 ? results[0].id : null });
             }
         });
@@ -267,9 +267,9 @@ function getEndpointId(endpoint) {
 exports.getEndpointId = getEndpointId;
 function getSubscribe(userId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select ENDPOINT.endpoint from ENDPOINT inner join USER_SUBSCRIPTION \n        on ENDPOINT.id = USER_SUBSCRIPTION.endpointId where USER_SUBSCRIPTION.userId = " + userId, function (error, results) {
+        index_1["default"].query("select ENDPOINT.* from ENDPOINT inner join USER_SUBSCRIPTION \n        on ENDPOINT.id = USER_SUBSCRIPTION.endpointId where USER_SUBSCRIPTION.userId = " + userId, function (error, results) {
             if (error) {
-                console.log('select error: ', error);
+                console.log('get subscribe error: ', error);
                 reject(error);
             }
             else {
@@ -310,6 +310,21 @@ function preemptSubscribe(userId, endpointId) {
     });
 }
 exports.preemptSubscribe = preemptSubscribe;
+function removeSubscribe(userId) {
+    return new Promise(function (resolve, reject) {
+        index_1["default"].query("delete from USER_SUBSCRIPTION where userId = " + userId, function (error, results) {
+            if (error) {
+                console.log('remove error: ', error);
+                reject(error);
+            }
+            else {
+                console.log('remove succeed: ', results);
+                resolve();
+            }
+        });
+    });
+}
+exports.removeSubscribe = removeSubscribe;
 function updateSubscribe(userId, endpointId) {
     return new Promise(function (resolve, reject) {
         index_1["default"].query("update USER_SUBSCRIPTION set endpointId = " + endpointId + " where userId = " + userId, function (error, results) {

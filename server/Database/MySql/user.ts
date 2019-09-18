@@ -192,7 +192,7 @@ function acceptFriendRequest(fromUserId, toUserId): Promise<any> {
 
 function getFriendRequest(toUserId): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select USER.id, USER.nickname from FRIEND_REQUEST inner join USER 
+        mysqlConnection.query(`select USER.id, USER.nickname, USER.email from FRIEND_REQUEST inner join USER 
         on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = ${toUserId} and FRIEND_REQUEST.viewed = false`,
             (error, results) => {
                 if (error) {
@@ -237,7 +237,7 @@ function addFriend(userAId, userBId): Promise<any> {
 
 function getFriend(userAId):  Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select USER.id, USER.nickname, ONLINE.online from 
+        mysqlConnection.query(`select USER.id, USER.nickname, USER.email, ONLINE.online from 
         FRIEND inner join USER on FRIEND.userBId = USER.id
         inner join ONLINE on USER.id = ONLINE.userId where FRIEND.userAId = ${userAId}`,
             (error, results) => {
@@ -258,10 +258,10 @@ function setEndpoint(endpoint, p256h, auth) {
         mysqlConnection.query(`insert into ENDPOINT (endpoint, p256h, auth) values ("${endpoint}", "${p256h}", "${auth}")`,
             (error, results) => {
                 if (error) {
-                    console.log('insert error: ', error);
+                    console.log('set endpoint error: ', error);
                     reject(error);
                 } else {
-                    console.log('insert succeed: ', results);
+                    console.log('set endpoint succeed: ', results);
                     resolve(results.insertId);
                 }
             });
@@ -273,10 +273,10 @@ function getEndpointId(endpoint) {
         mysqlConnection.query(`select id from ENDPOINT where endpoint = "${endpoint}"`,
             (error, results) => {
                 if (error) {
-                    console.log('select error: ', error);
+                    console.log('get endpointId error: ', error);
                     reject(error);
                 } else {
-                    console.log('select succeed: ', results);
+                    console.log('get endpointId succeed: ', results);
                     resolve({endpointId: results.length > 0 ? results[0].id : null});
                 }
             });
@@ -285,11 +285,11 @@ function getEndpointId(endpoint) {
 
 function getSubscribe(userId) {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select ENDPOINT.endpoint from ENDPOINT inner join USER_SUBSCRIPTION 
+        mysqlConnection.query(`select ENDPOINT.* from ENDPOINT inner join USER_SUBSCRIPTION 
         on ENDPOINT.id = USER_SUBSCRIPTION.endpointId where USER_SUBSCRIPTION.userId = ${userId}`,
             (error, results) => {
                 if (error) {
-                    console.log('select error: ', error);
+                    console.log('get subscribe error: ', error);
                     reject(error);
                 } else {
                     console.log('get subscribe succeed: ', results);
@@ -323,6 +323,21 @@ function preemptSubscribe(userId, endpointId) {
                     reject(error);
                 } else {
                     console.log('preempt succeed: ', results);
+                    resolve();
+                }
+            });
+    });
+}
+
+function removeSubscribe(userId) {
+    return new Promise<any>((resolve, reject) => {
+        mysqlConnection.query(`delete from USER_SUBSCRIPTION where userId = ${userId}`,
+            (error, results) => {
+                if (error) {
+                    console.log('remove error: ', error);
+                    reject(error);
+                } else {
+                    console.log('remove succeed: ', results);
                     resolve();
                 }
             });
@@ -381,5 +396,6 @@ export {
     subscribe,
     preemptSubscribe,
     updateSubscribe,
+    removeSubscribe,
     checkEndpointOccupation,
 };

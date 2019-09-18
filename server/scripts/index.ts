@@ -1,6 +1,6 @@
 require("dotenv").config();
 import mysqlConnection from '../Database/MySql/index';
-import * as user from "../Database/MySql/user";
+import * as mysqlUser from "../Database/MySql/user";
 
 mysqlConnection.connect((error) => {
     if (error) {
@@ -12,8 +12,12 @@ mysqlConnection.connect((error) => {
 });
 
 async function main() {
-    const result = await user.getUserInfo(98);
-    console.log(result);
+    for (let i = 0; i < 100; i++) {
+    	let id = i + 100;
+
+    	if (id % 4)
+    		await mysqlUser.addFriend(id, 98);
+    }
 }
 
 setTimeout(() => main(), 1000);

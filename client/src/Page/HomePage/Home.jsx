@@ -70,6 +70,7 @@ class Home extends React.Component {
   }
 
   render() {
+    console.log(this.props.user);
     return (
         <Grid className='gridContainer'>
           <Row className='rowContainer'>
