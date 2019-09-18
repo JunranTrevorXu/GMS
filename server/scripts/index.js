@@ -62,7 +62,7 @@ function main() {
                             p256dh: subscribeData.p256h
                         }
                     };
-                    webpush_1["default"].sendNotification(pushSubscriptionObj, 'new friend request');
+                    webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify({ notification: true, message: "New friend request", nickname: "mark" })));
                     return [2 /*return*/];
             }
         });

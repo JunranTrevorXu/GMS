@@ -54,6 +54,17 @@ class Home extends React.Component {
 
       console.log(registration);
       await navigator.serviceWorker.ready;
+
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        const msg = event.data.msg;
+        if (msg === 'New friend request') {
+          this.props.getFriendRequest();
+        }
+        else if (msg === 'Friend request accepted') {
+          this.props.getFriend();
+        }
+      });
+
       let pushSubscription = await registration.pushManager.subscribe(subscribeOptions);
       console.log(JSON.stringify(pushSubscription));
       pushSubscription = JSON.parse(JSON.stringify(pushSubscription));

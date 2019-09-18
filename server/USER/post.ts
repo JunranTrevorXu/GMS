@@ -21,7 +21,13 @@ router.post('/sendFriendRequest', async (req, res) => {
                 p256dh: subscribeData.p256h,
             }
         };
-        webpush.sendNotification(pushSubscriptionObj, 'new friend request');
+        const toUserInfo = await mysqlUser.getUserInfo(toUserId);
+        const payloadObj = {
+            notification: !(await mysqlUser.getOnline(toUserId)),
+            message: 'New friend request',
+            nickname: toUserInfo.nickname
+        };
+        webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
     } catch (error) {
         res.send('./sendFriendRequest 1');
         return;
@@ -47,7 +53,13 @@ router.post('/acceptFriendRequest', async (req, res) => {
                 p256dh: subscribeData.p256h,
             }
         };
-        webpush.sendNotification(pushSubscriptionObj, 'friend request accepted');
+        const fromUserInfo = await mysqlUser.getUserInfo(fromUserId);
+        const payloadObj = {
+            notification: !(await mysqlUser.getOnline(fromUserId)),
+                message: 'Friend request accepted',
+            nickname: fromUserInfo.nickname
+        };
+        webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
     } catch (error) {
         res.send('./acceptFriendRequest 1');
     }

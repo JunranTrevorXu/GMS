@@ -7,17 +7,24 @@ self.addEventListener("activate", function(event) {
   console.log("activate");
 });
 
-self.addEventListener("push", function(event) {
-  console.log(event);
-  setTimeout(() => {
-    self.registration.showNotification("new message", {
-      body: "body"
-    });
-  }, 100);
-  if (event.data) {
-    console.log("This push event with data: ", event.data.text());
+self.addEventListener("push", async function(event) {
+  const eventData = event.data.json();
+
+  if (eventData.notification) {
+    setTimeout(() => {
+      self.registration.showNotification(
+        eventData.message + ": " + eventData.nickname
+      );
+    }, 100);
   } else {
-    console.log("This push event has no data.");
+    self.clients.matchAll().then(async clients => {
+      const clientId = clients[0].id;
+      const client = await self.clients.get(clientId);
+      if (client)
+        client.postMessage({
+          msg: eventData.message
+        });
+    });
   }
 });
 

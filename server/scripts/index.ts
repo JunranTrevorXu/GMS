@@ -22,7 +22,7 @@ async function main() {
             p256dh: subscribeData.p256h,
         }
     };
-    webpush.sendNotification(pushSubscriptionObj, 'new friend request');
+    webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify({notification: true, message: "New friend request", nickname: "Mark"})));
 }
 
 setTimeout(() => main(), 1000);

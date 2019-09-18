@@ -20,8 +20,7 @@ router.post('/signin', async(req, res) => {
 
     if (result.auth) {
         try {
-            const userId = await mysqlUser.getUserId(email);
-            req.session.encryptedId = userId;
+            req.session.encryptedId = await mysqlUser.getUserId(email);
             req.session.loggedin = true;
             res.send({OK: true});
         } catch (error) {
