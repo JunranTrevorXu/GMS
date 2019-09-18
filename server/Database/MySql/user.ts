@@ -26,7 +26,7 @@ function getUserId(email): Promise<any> {
                 }
                 else {
                     console.log('get user Id succeed: ', results);
-                    resolve({id: results.length > 0 ? results[0].id : null});
+                    resolve(results.length > 0 ? results[0].id : null);
                 }
             });
     });

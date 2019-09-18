@@ -2,11 +2,15 @@
 @import '@material/react-list/index.scss';
 
 
-.list-item {
-	justify-content: center;
-}
+.misc-drawer-container {
+	width: 100%;
 
-.material-icons {
-	font-size: 25px;
-	color: #018786;
+	.list-item {
+		justify-content: center;
+
+		.material-icons {
+			font-size: 25px;
+			color: #018786;
+		}
+	}
 }

@@ -25,3 +25,18 @@ export function* getFriendRequest() {
     yield put(UserActions.setFriendRequest(data.requestList));
   }
 }
+
+export function* sendFriendRequest(action) {
+  yield call(UserService.sendFriendRequest, action.toUserEmail);
+}
+
+export function* acceptFriendRequest(action) {
+  const response = yield call(
+    UserService.acceptFriendRequest,
+    action.fromUserId
+  );
+  if (response.data.OK) {
+    yield put(UserActions.getFriendRequest());
+    yield put(UserActions.getFriend());
+  }
+}

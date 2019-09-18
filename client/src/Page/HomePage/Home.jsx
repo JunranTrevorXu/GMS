@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from "react-redux";
 import {Cell, Grid, Row} from '@material/react-layout-grid';
 import Misc from './Misc';
+import FriendRequest from './FriendRequest';
+import FriendList from "./FriendList";
 
 import UserActions from '../../ReduxStore/User/Actions';
 import * as UserService from '../../ApiService/UserService';
@@ -69,6 +71,25 @@ class Home extends React.Component {
     this.props.getFriendRequest();
   }
 
+  handleSelectTab(tab) {
+    this.setState({ tab });
+  }
+
+  renderList() {
+    switch(this.state.tab) {
+      case "friendList":
+        return <FriendList />;
+      case "friendRequest":
+        return <FriendRequest />;
+      case "userProfile":
+        break;
+      case "settings":
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     console.log(this.props.user);
     return (
@@ -77,10 +98,12 @@ class Home extends React.Component {
             <Cell columns={1} className='settingsContainer'>
               <Misc
                 tab={this.state.tab}
-                selectTab={(tab) => this.setState({ tab })}
+                selectTab={(tab) => this.handleSelectTab(tab)}
               />
             </Cell>
-            <Cell columns={3} className='friendListContainer'></Cell>
+            <Cell columns={3} className='friendListContainer'>
+              {this.renderList()}
+            </Cell>
             <Cell columns={8} className='chatContainer'></Cell>
           </Row>
         </Grid>

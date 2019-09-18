@@ -151,6 +151,42 @@ function getFriend() {
   );
 }
 
+function sendFriendRequest(toUserEmail) {
+  const option = {
+    method: "post",
+    url: "/user/sendFriendRequest",
+    data: {
+      toUserEmail
+    }
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
+function acceptFriendRequest(fromUserId) {
+  const option = {
+    method: "post",
+    url: "/user/acceptFriendRequest",
+    data: {
+      fromUserId
+    }
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
 function checkAuth() {
   const option = {
     method: "get",
@@ -176,5 +212,7 @@ export {
   getUserInfo,
   getFriendRequest,
   getFriend,
+  sendFriendRequest,
+  acceptFriendRequest,
   checkAuth
 };

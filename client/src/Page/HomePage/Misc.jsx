@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from "react-redux";
 import List, { ListItem } from '@material/react-list';
+import Drawer, {
+	DrawerContent,
+} from '@material/react-drawer';
 
 import './Misc.scss';
 
@@ -30,22 +33,22 @@ class Misc extends React.Component {
   render() {
 
   	return (
-  		<div>
-			<List singleSelection selectedIndex={this.tabMapReverse[this.props.tab]} handleSelect={(index) => this.handleSelect(index)}>
-				<ListItem className='list-item'>
-					<i className='material-icons'>people</i>
-				</ListItem>
-				<ListItem className='list-item'>
-					<i className='material-icons'>add</i>
-				</ListItem>
-				<ListItem className='list-item'>
-					<i className='material-icons'>person_pin</i>
-				</ListItem>
-				<ListItem className='list-item'>
-					<i className='material-icons'>settings_applications</i>
-				</ListItem>
-	        </List>
-  		</div>
+  		<Drawer className='misc-drawer-container'>
+				<List singleSelection selectedIndex={this.tabMapReverse[this.props.tab]} handleSelect={(index) => this.handleSelect(index)}>
+					<ListItem className='list-item'>
+						<i className='material-icons'>people</i>
+					</ListItem>
+					<ListItem className='list-item'>
+						<i className='material-icons'>add</i>
+					</ListItem>
+					<ListItem className='list-item'>
+						<i className='material-icons'>person_pin</i>
+					</ListItem>
+					<ListItem className='list-item'>
+						<i className='material-icons'>settings_applications</i>
+					</ListItem>
+				</List>
+  		</Drawer>
   	);
   }
 }

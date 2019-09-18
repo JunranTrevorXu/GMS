@@ -6,7 +6,9 @@ const { Types, Creators } = createActions({
   getFriend: null,
   setFriend: ["friend"],
   getFriendRequest: null,
-  setFriendRequest: ["friendRequest"]
+  setFriendRequest: ["friendRequest"],
+  sendFriendRequest: ["toUserEmail"],
+  acceptFriendRequest: ["fromUserId"]
 });
 
 export const UserTypes = Types;

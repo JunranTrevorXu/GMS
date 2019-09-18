@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from "react-redux";
-import * as UserService from '../../ApiService/UserService';
+import List, { ListItem, ListItemText } from '@material/react-list';
+
+import './FriendList.scss';
 
 class FriendList extends React.Component {
   constructor(props) {
@@ -9,7 +11,19 @@ class FriendList extends React.Component {
   }
 
   render() {
-
+    return (
+      <div>
+        <List className='friend-list-container'>
+          {this.props.user.friend.map((friend) => {
+            return (
+              <ListItem>
+                <ListItemText primaryText={friend.nickname} />
+              </ListItem>
+            )
+          })}
+        </List>
+      </div>
+    );
   }
 }
 

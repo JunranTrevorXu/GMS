@@ -10,7 +10,7 @@ self.addEventListener("activate", function(event) {
 self.addEventListener("push", function(event) {
   console.log(event);
   setTimeout(() => {
-    self.registration.showNotification("new message " + navigator.onLine, {
+    self.registration.showNotification("new message", {
       body: "body"
     });
   }, 100);

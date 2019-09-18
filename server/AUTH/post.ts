@@ -20,8 +20,8 @@ router.post('/signin', async(req, res) => {
 
     if (result.auth) {
         try {
-            result = await mysqlUser.getUserId(email);
-            req.session.encryptedId = result.id;
+            const userId = await mysqlUser.getUserId(email);
+            req.session.encryptedId = userId;
             req.session.loggedin = true;
             res.send({OK: true});
         } catch (error) {
@@ -42,13 +42,13 @@ router.post('/signup', async (req, res) => {
 
     try {
         await mysqlUser.createUser(to);
-        const result = await mysqlUser.getUserId(to);
-        if (result.id !== null) {
+        const userId = await mysqlUser.getUserId(to);
+        if (userId !== null) {
             await sendEmail(to, subject, text);
-            await mysqlUser.createOnline(result.id);
+            await mysqlUser.createOnline(userId);
 
             // set encrypted Id for submit register
-            req.session.encryptedId = result.id;
+            req.session.encryptedId = userId;
             res.send({OK: true});
         }
         else {

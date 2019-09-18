@@ -1,0 +1,45 @@
+@import '@material/react-list/index.scss';
+@import '@material/react-button/index.scss';
+@import '@material/react-text-field/index.scss';
+@import '@material/textfield/mixins';
+@import '@material/button/mixins';
+
+.friend-request-class {
+  .add-friend-text-field {
+    width: 100%;
+    @include mdc-text-field-bottom-line-color(#018786);
+    @include mdc-text-field-hover-bottom-line-color(#018786);
+  }
+
+  .send-request-button {
+    margin-top: 10px;
+    margin-left: 30%;
+    @include mdc-button-ink-color(#018786);
+  }
+
+  .hr-line {
+    border-top: 1px solid #018786;
+  }
+
+  .friend-request-list-container {
+    height: 80vh;
+    overflow: scroll;
+
+    .list-item {
+      justify-content: space-between;
+      margin-bottom: 20px;
+
+      .list-item-text-container {
+        flex-direction: column;
+
+        .list-item-text {
+          margin-bottom: 1px;
+        }
+      }
+
+      .accept-button {
+        @include mdc-button-ink-color(#018786);
+      }
+    }
+  }
+}

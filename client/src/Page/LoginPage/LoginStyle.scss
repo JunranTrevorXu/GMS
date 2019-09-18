@@ -14,45 +14,45 @@
 	text-align: center;
 	padding: 20px;
 	padding-bottom: 40px;
-}
 
-.logoContainer {
-	@include mdc-typography-base;
-	font-size: 50px;
-}
+	.logoContainer {
+		@include mdc-typography-base;
+		font-size: 50px;
+	}
 
-.tabBar {
-	margin-top: 20px;
-	width: 300px;
-	align-self: center;
-}
+	.tabBar {
+		margin-top: 20px;
+		width: 300px;
+		align-self: center;
 
-.tab {
-	margin: 10px;
-}
+		.tab {
+			margin: 10px;
 
-.tabText {
-	font-size: 12px;
-}
+			.tabText {
+				font-size: 12px;
+			}
+		}
+	}
 
-.inputForm {
-	margin-top: 10px;
-}
+	.inputForm {
+		margin-top: 10px;
 
-.textField {
-	margin-top: 20px;
-	width: 200px;
-	height: 50px;
-	border-radius: 0;
-}
+		.textField {
+			margin-top: 20px;
+			width: 200px;
+			height: 50px;
+			border-radius: 0;
 
-.input {
-	font-size: 15px;
-}
+			.input {
+				font-size: 15px;
+			}
+		}
+	}
 
-.button {
-	align-self: center;
-	width: 100px;
-	margin-top: 20px;
-	font-size: 15px;
+	.button {
+		align-self: center;
+		width: 100px;
+		margin-top: 20px;
+		font-size: 15px;
+	}
 }

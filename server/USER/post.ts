@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+import webpush from '../Service/webpush';
 
 import * as mysqlUser from '../Database/MySql/user';
 
@@ -10,12 +11,21 @@ router.post('/sendFriendRequest', async (req, res) => {
     try {
         const toUserId = await mysqlUser.getUserId(toUserEmail);
         await mysqlUser.sendFriendRequest(fromUserId, toUserId);
+
+        //web push
+        const subscribeData = await mysqlUser.getSubscribe(toUserId);
+        const pushSubscriptionObj = {
+            endpoint: subscribeData.endpoint,
+            keys: {
+                auth: subscribeData.auth,
+                p256dh: subscribeData.p256h,
+            }
+        };
+        webpush.sendNotification(pushSubscriptionObj, 'new friend request');
     } catch (error) {
         res.send('./sendFriendRequest 1');
         return;
     }
-
-    //web push
 
     res.send({OK: true});
 });
@@ -27,11 +37,20 @@ router.post('/acceptFriendRequest', async (req, res) => {
     try {
         await mysqlUser.acceptFriendRequest(fromUserId, toUserId);
         await mysqlUser.addFriend(fromUserId, toUserId);
+
+        //web push
+        const subscribeData = await mysqlUser.getSubscribe(fromUserId);
+        const pushSubscriptionObj = {
+            endpoint: subscribeData.endpoint,
+            keys: {
+                auth: subscribeData.auth,
+                p256dh: subscribeData.p256h,
+            }
+        };
+        webpush.sendNotification(pushSubscriptionObj, 'friend request accepted');
     } catch (error) {
         res.send('./acceptFriendRequest 1');
     }
-
-    //web push
 
     res.send({OK: true});
 });

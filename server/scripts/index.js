@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -39,6 +38,7 @@ exports.__esModule = true;
 require("dotenv").config();
 var index_1 = require("../Database/MySql/index");
 var mysqlUser = require("../Database/MySql/user");
+var webpush_1 = require("../Service/webpush");
 index_1["default"].connect(function (error) {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -49,24 +49,21 @@ index_1["default"].connect(function (error) {
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var i, id;
+        var subscribeData, pushSubscriptionObj;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    i = 0;
-                    _a.label = 1;
+                case 0: return [4 /*yield*/, mysqlUser.getSubscribe(98)];
                 case 1:
-                    if (!(i < 100)) return [3 /*break*/, 4];
-                    id = i + 100;
-                    if (!(id % 4)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, mysqlUser.addFriend(id, 98)];
-                case 2:
-                    _a.sent();
-                    _a.label = 3;
-                case 3:
-                    i++;
-                    return [3 /*break*/, 1];
-                case 4: return [2 /*return*/];
+                    subscribeData = _a.sent();
+                    pushSubscriptionObj = {
+                        endpoint: subscribeData.endpoint,
+                        keys: {
+                            auth: subscribeData.auth,
+                            p256dh: subscribeData.p256h
+                        }
+                    };
+                    webpush_1["default"].sendNotification(pushSubscriptionObj, 'new friend request');
+                    return [2 /*return*/];
             }
         });
     });
