@@ -63,7 +63,7 @@ router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, 
                     endpoint: subscribeData.endpoint,
                     keys: {
                         auth: subscribeData.auth,
-                        p256dh: subscribeData.p256h
+                        p256dh: subscribeData.p256dh
                     }
                 };
                 return [4 /*yield*/, mysqlUser.getUserInfo(toUserId)];
@@ -89,7 +89,7 @@ router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, 
     });
 }); });
 router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var toUserId, fromUserId, subscribeData, pushSubscriptionObj, fromUserInfo, payloadObj, _a, error_2;
+    var toUserId, fromUserId, subscribeData, pushSubscriptionObj, toUserInfo, payloadObj, _a, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -111,18 +111,18 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this
                     endpoint: subscribeData.endpoint,
                     keys: {
                         auth: subscribeData.auth,
-                        p256dh: subscribeData.p256h
+                        p256dh: subscribeData.p256dh
                     }
                 };
-                return [4 /*yield*/, mysqlUser.getUserInfo(fromUserId)];
+                return [4 /*yield*/, mysqlUser.getUserInfo(toUserId)];
             case 5:
-                fromUserInfo = _b.sent();
+                toUserInfo = _b.sent();
                 _a = {};
                 return [4 /*yield*/, mysqlUser.getOnline(fromUserId)];
             case 6:
                 payloadObj = (_a.notification = !(_b.sent()),
                     _a.message = 'Friend request accepted',
-                    _a.nickname = fromUserInfo.nickname,
+                    _a.nickname = toUserInfo.nickname,
                     _a);
                 webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
                 return [3 /*break*/, 8];

@@ -151,7 +151,7 @@ function setOffline(userId) {
 exports.setOffline = setOffline;
 function sendFriendRequest(fromUserId, toUserId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (" + fromUserId + ", " + toUserId + ", false)", function (error, results) {
+        index_1["default"].query("insert into FRIEND_REQUEST (fromUserId, toUserId, accepted) values (" + fromUserId + ", " + toUserId + ", false)", function (error, results) {
             if (error) {
                 console.log('send friend request error: ', error);
                 reject(error);
@@ -166,7 +166,7 @@ function sendFriendRequest(fromUserId, toUserId) {
 exports.sendFriendRequest = sendFriendRequest;
 function acceptFriendRequest(fromUserId, toUserId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("update FRIEND_REQUEST set viewed = true where fromUserId = " + fromUserId + " and toUserId = " + toUserId, function (error, results) {
+        index_1["default"].query("update FRIEND_REQUEST set accepted = true where fromUserId = " + fromUserId + " and toUserId = " + toUserId, function (error, results) {
             if (error) {
                 console.log('accept friend request error: ', error);
                 reject(error);
@@ -181,7 +181,7 @@ function acceptFriendRequest(fromUserId, toUserId) {
 exports.acceptFriendRequest = acceptFriendRequest;
 function getFriendRequest(toUserId) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select USER.id, USER.nickname, USER.email from FRIEND_REQUEST inner join USER \n        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = " + toUserId + " and FRIEND_REQUEST.viewed = false", function (error, results) {
+        index_1["default"].query("select USER.id, USER.nickname, USER.email from FRIEND_REQUEST inner join USER \n        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = " + toUserId + " and FRIEND_REQUEST.accepted = false", function (error, results) {
             if (error) {
                 console.log('get friend request error: ', error);
                 reject(error);
@@ -235,9 +235,9 @@ function getFriend(userAId) {
     });
 }
 exports.getFriend = getFriend;
-function setEndpoint(endpoint, p256h, auth) {
+function setEndpoint(endpoint, p256dh, auth) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("insert into ENDPOINT (endpoint, p256h, auth) values (\"" + endpoint + "\", \"" + p256h + "\", \"" + auth + "\")", function (error, results) {
+        index_1["default"].query("insert into ENDPOINT (endpoint, p256dh, auth) values (\"" + endpoint + "\", \"" + p256dh + "\", \"" + auth + "\")", function (error, results) {
             if (error) {
                 console.log('set endpoint error: ', error);
                 reject(error);

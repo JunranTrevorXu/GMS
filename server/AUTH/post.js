@@ -41,44 +41,44 @@ var router = express.Router();
 var email_1 = require("../Service/email");
 var mysqlUser = require("../Database/MySql/user");
 router.post('/signin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var email, password, result, error_1, _a, error_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var email, password, result, error_1, userId, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
                 email = req.body.email;
                 password = req.body.password;
-                _b.label = 1;
+                _a.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, mysqlUser.login(email, password)];
             case 2:
-                result = _b.sent();
+                result = _a.sent();
                 return [3 /*break*/, 4];
             case 3:
-                error_1 = _b.sent();
+                error_1 = _a.sent();
                 res.send('/signin 1');
                 return [2 /*return*/];
             case 4:
                 console.log(result);
                 if (!result.auth) return [3 /*break*/, 9];
-                _b.label = 5;
+                _a.label = 5;
             case 5:
-                _b.trys.push([5, 7, , 8]);
-                _a = req.session;
+                _a.trys.push([5, 7, , 8]);
                 return [4 /*yield*/, mysqlUser.getUserId(email)];
             case 6:
-                _a.encryptedId = _b.sent();
+                userId = _a.sent();
+                req.session.encryptedId = userId;
                 req.session.loggedin = true;
-                res.send({ OK: true });
+                res.send({ OK: true, userId: userId });
                 return [3 /*break*/, 8];
             case 7:
-                error_2 = _b.sent();
+                error_2 = _a.sent();
                 res.send('/signin 2');
                 return [2 /*return*/];
             case 8: return [3 /*break*/, 10];
             case 9:
                 res.send('/signin 3');
-                _b.label = 10;
+                _a.label = 10;
             case 10: return [2 /*return*/];
         }
     });

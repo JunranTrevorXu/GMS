@@ -1,6 +1,8 @@
 "use strict";
 exports.__esModule = true;
-var express = require('express');
+var app = require('express')();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 require("dotenv").config();
@@ -8,8 +10,8 @@ var index_1 = require("./Database/MySql/index");
 var index_2 = require("./Middleware/index");
 var index_3 = require("./AUTH/index");
 var index_4 = require("./USER/index");
-var app = express();
 var port = parseInt(process.env.port);
+var user_socket_map = {};
 index_1["default"].connect(function (error) {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -40,4 +42,26 @@ index_4["default"](app);
 app.get('/', function (req, res) {
     res.send("hello");
 });
-app.listen(port, function () { return console.log('listening in port ', port); });
+// ws socket handlers
+io.on('connection', function (socket) {
+    socket.on('register', function (_a) {
+        var userId = _a.userId;
+        console.log("register", userId);
+        user_socket_map[userId] = socket.id;
+    });
+    socket.on('typing', function (_a) {
+        var fromUserId = _a.fromUserId, toUserId = _a.toUserId;
+        if (user_socket_map[toUserId]) {
+            io.to(user_socket_map[toUserId]).emit('typing', { fromUserId: fromUserId });
+        }
+    });
+    socket.on('message', function (_a) {
+        var fromUserId = _a.fromUserId, toUserId = _a.toUserId, message = _a.message;
+        if (user_socket_map[toUserId]) {
+            io.to(user_socket_map[toUserId]).emit('message', { fromUserId: fromUserId, message: message });
+        }
+    });
+});
+server.listen(port, function () {
+    console.log('listening on ', port);
+});

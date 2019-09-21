@@ -160,7 +160,7 @@ function setOffline(userId): Promise<any> {
 
 function sendFriendRequest(fromUserId, toUserId): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`insert into FRIEND_REQUEST (fromUserId, toUserId, viewed) values (${fromUserId}, ${toUserId}, false)`,
+        mysqlConnection.query(`insert into FRIEND_REQUEST (fromUserId, toUserId, accepted) values (${fromUserId}, ${toUserId}, false)`,
             (error, results) => {
                 if (error) {
                     console.log('send friend request error: ', error);
@@ -176,7 +176,7 @@ function sendFriendRequest(fromUserId, toUserId): Promise<any> {
 
 function acceptFriendRequest(fromUserId, toUserId): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`update FRIEND_REQUEST set viewed = true where fromUserId = ${fromUserId} and toUserId = ${toUserId}`,
+        mysqlConnection.query(`update FRIEND_REQUEST set accepted = true where fromUserId = ${fromUserId} and toUserId = ${toUserId}`,
             (error, results) => {
                 if (error) {
                     console.log('accept friend request error: ', error);
@@ -193,7 +193,7 @@ function acceptFriendRequest(fromUserId, toUserId): Promise<any> {
 function getFriendRequest(toUserId): Promise<any> {
     return new Promise<any>((resolve, reject) => {
         mysqlConnection.query(`select USER.id, USER.nickname, USER.email from FRIEND_REQUEST inner join USER 
-        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = ${toUserId} and FRIEND_REQUEST.viewed = false`,
+        on FRIEND_REQUEST.fromUserId = USER.id where FRIEND_REQUEST.toUserId = ${toUserId} and FRIEND_REQUEST.accepted = false`,
             (error, results) => {
                 if (error) {
                     console.log('get friend request error: ', error);
@@ -253,9 +253,9 @@ function getFriend(userAId):  Promise<any> {
     });
 }
 
-function setEndpoint(endpoint, p256h, auth) {
+function setEndpoint(endpoint, p256dh, auth) {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`insert into ENDPOINT (endpoint, p256h, auth) values ("${endpoint}", "${p256h}", "${auth}")`,
+        mysqlConnection.query(`insert into ENDPOINT (endpoint, p256dh, auth) values ("${endpoint}", "${p256dh}", "${auth}")`,
             (error, results) => {
                 if (error) {
                     console.log('set endpoint error: ', error);

@@ -3,6 +3,8 @@ import mysqlConnection from '../Database/MySql/index';
 import * as mysqlUser from "../Database/MySql/user";
 import webpush from '../Service/webpush';
 
+console.log("env: ", process.env.mysqlHost);
+
 mysqlConnection.connect((error) => {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -14,15 +16,15 @@ mysqlConnection.connect((error) => {
 
 async function main() {
     //web push
-    const subscribeData = await mysqlUser.getSubscribe(98);
-    const pushSubscriptionObj = {
-        endpoint: subscribeData.endpoint,
-        keys: {
-            auth: subscribeData.auth,
-            p256dh: subscribeData.p256h,
-        }
-    };
-    webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify({notification: true, message: "New friend request", nickname: "Mark"})));
+        mysqlConnection.query(`insert into test values (22);`,
+            (error, results) => {
+                if (error) {
+                    console.log('create user error: ', error);
+                }
+                else {
+                    console.log('create user succeed: ', results);
+                }
+            });
 }
 
 setTimeout(() => main(), 1000);

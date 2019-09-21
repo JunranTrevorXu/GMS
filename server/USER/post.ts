@@ -18,7 +18,7 @@ router.post('/sendFriendRequest', async (req, res) => {
             endpoint: subscribeData.endpoint,
             keys: {
                 auth: subscribeData.auth,
-                p256dh: subscribeData.p256h,
+                p256dh: subscribeData.p256dh,
             }
         };
         const toUserInfo = await mysqlUser.getUserInfo(toUserId);
@@ -50,7 +50,7 @@ router.post('/acceptFriendRequest', async (req, res) => {
             endpoint: subscribeData.endpoint,
             keys: {
                 auth: subscribeData.auth,
-                p256dh: subscribeData.p256h,
+                p256dh: subscribeData.p256dh,
             }
         };
         const toUserInfo = await mysqlUser.getUserInfo(toUserId);

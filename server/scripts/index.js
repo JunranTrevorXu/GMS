@@ -37,8 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 require("dotenv").config();
 var index_1 = require("../Database/MySql/index");
-var mysqlUser = require("../Database/MySql/user");
-var webpush_1 = require("../Service/webpush");
+console.log("env: ", process.env.mysqlHost);
 index_1["default"].connect(function (error) {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -49,22 +48,17 @@ index_1["default"].connect(function (error) {
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var subscribeData, pushSubscriptionObj;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, mysqlUser.getSubscribe(98)];
-                case 1:
-                    subscribeData = _a.sent();
-                    pushSubscriptionObj = {
-                        endpoint: subscribeData.endpoint,
-                        keys: {
-                            auth: subscribeData.auth,
-                            p256dh: subscribeData.p256h
-                        }
-                    };
-                    webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify({ notification: true, message: "New friend request", nickname: "mark" })));
-                    return [2 /*return*/];
-            }
+            //web push
+            index_1["default"].query("insert into test values (22);", function (error, results) {
+                if (error) {
+                    console.log('create user error: ', error);
+                }
+                else {
+                    console.log('create user succeed: ', results);
+                }
+            });
+            return [2 /*return*/];
         });
     });
 }

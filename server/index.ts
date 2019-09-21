@@ -1,4 +1,6 @@
-const express = require('express');
+const app = require('express')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 require("dotenv").config();
@@ -8,8 +10,9 @@ import applyMiddleWare from './Middleware/index';
 import applyAuthRouters from './AUTH/index';
 import applyUserRouters from './USER/index';
 
-const app = express();
 const port:number = parseInt(process.env.port);
+
+var user_socket_map = {};
 
 mysqlConnection.connect((error) => {
     if (error) {
@@ -47,4 +50,28 @@ app.get('/', (req, res) => {
     res.send("hello");
 });
 
-app.listen(port, () => console.log('listening in port ', port));
+
+// ws socket handlers
+
+io.on('connection', (socket) => {
+    socket.on('register', ({ userId }) => {
+        console.log("register", userId);
+        user_socket_map[userId] = socket.id;
+    });
+
+    socket.on('typing', ({ fromUserId, toUserId }) => {
+        if (user_socket_map[toUserId]) {
+            io.to(user_socket_map[toUserId]).emit('typing', { fromUserId });
+        }
+    });
+
+    socket.on('message', ({ fromUserId, toUserId, message }) => {
+        if (user_socket_map[toUserId]) {
+            io.to(user_socket_map[toUserId]).emit('message', { fromUserId, message });
+        }
+    });
+});
+
+server.listen(port, function(){
+    console.log('listening on ', port);
+});
