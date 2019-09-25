@@ -7,6 +7,7 @@ import FriendList from "./FriendList";
 
 import UserActions from '../../ReduxStore/User/Actions';
 import * as UserService from '../../ApiService/UserService';
+import wsocket from '../../ApiService/WebSocket';
 
 import './Home.scss';
 

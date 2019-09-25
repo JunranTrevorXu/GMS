@@ -48,3 +48,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => console.log('listening in port ', port));
+
+console.log('\x1b[33m%s\x1b[0m', 'interesting!');

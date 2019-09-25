@@ -41,3 +41,4 @@ app.get('/', function (req, res) {
     res.send("hello");
 });
 app.listen(port, function () { return console.log('listening in port ', port); });
+console.log('\x1b[33m%s\x1b[0m', 'interesting!');

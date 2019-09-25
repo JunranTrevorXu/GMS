@@ -4,5 +4,8 @@ export const InitialState = Map({
   email: null,
   nickname: null,
   friend: [],
-  friendRequest: []
+  friendRequest: [],
+  friendTyping: {},
+  fromFriendMessage: {},
+  toFriendMessage: {},
 });

@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -34,13 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 exports.__esModule = true;
 var express = require('express');
 var router = express.Router();
 var webpush_1 = require("../Service/webpush");
 var mysqlUser = require("../Database/MySql/user");
-router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/sendFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var fromUserId, toUserEmail, toUserId, subscribeData, pushSubscriptionObj, toUserInfo, payloadObj, _a, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -88,8 +88,8 @@ router.post('/sendFriendRequest', function (req, res) { return __awaiter(_this, 
         }
     });
 }); });
-router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
-    var toUserId, fromUserId, subscribeData, pushSubscriptionObj, fromUserInfo, payloadObj, _a, error_2;
+router.post('/acceptFriendRequest', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var toUserId, fromUserId, subscribeData, pushSubscriptionObj, toUserInfo, payloadObj, _a, error_2;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -114,15 +114,15 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this
                         p256dh: subscribeData.p256h
                     }
                 };
-                return [4 /*yield*/, mysqlUser.getUserInfo(fromUserId)];
+                return [4 /*yield*/, mysqlUser.getUserInfo(toUserId)];
             case 5:
-                fromUserInfo = _b.sent();
+                toUserInfo = _b.sent();
                 _a = {};
                 return [4 /*yield*/, mysqlUser.getOnline(fromUserId)];
             case 6:
                 payloadObj = (_a.notification = !(_b.sent()),
                     _a.message = 'Friend request accepted',
-                    _a.nickname = fromUserInfo.nickname,
+                    _a.nickname = toUserInfo.nickname,
                     _a);
                 webpush_1["default"].sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
                 return [3 /*break*/, 8];
@@ -136,7 +136,7 @@ router.post('/acceptFriendRequest', function (req, res) { return __awaiter(_this
         }
     });
 }); });
-router.post('/subscribe', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
+router.post('/subscribe', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userId, _a, endpoint, p256dh, auth, endpointId, oldEndpoint, occupied, error_3;
     return __generator(this, function (_b) {
         switch (_b.label) {

@@ -8,7 +8,9 @@ const { Types, Creators } = createActions({
   getFriendRequest: null,
   setFriendRequest: ["friendRequest"],
   sendFriendRequest: ["toUserEmail"],
-  acceptFriendRequest: ["fromUserId"]
+  acceptFriendRequest: ["fromUserId"],
+  friendStartTyping: ["friendId"],
+  friendStopTyping: ["friendId"]
 });
 
 export const UserTypes = Types;
