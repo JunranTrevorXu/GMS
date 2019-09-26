@@ -51,7 +51,7 @@ router.get('/', function (req, res) { return __awaiter(_this, void 0, void 0, fu
                 return [4 /*yield*/, mysqlUser.getUserInfo(userId)];
             case 2:
                 result = _a.sent();
-                res.send({ OK: true, email: result.email, nickname: result.nickname });
+                res.send({ OK: true, id: userId, email: result.email, nickname: result.nickname });
                 return [3 /*break*/, 4];
             case 3:
                 error_1 = _a.sent();

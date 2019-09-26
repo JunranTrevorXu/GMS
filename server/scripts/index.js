@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 require("dotenv").config();
 var index_1 = require("../Database/MySql/index");
+var moment = require('moment');
 console.log("env: ", process.env.mysqlHost);
 index_1["default"].connect(function (error) {
     if (error) {
@@ -48,17 +49,25 @@ index_1["default"].connect(function (error) {
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
+        var fromUserId, toUserId, content, skip, limit;
         return __generator(this, function (_a) {
-            //web push
-            index_1["default"].query("insert into test values (22);", function (error, results) {
-                if (error) {
-                    console.log('create user error: ', error);
-                }
-                else {
-                    console.log('create user succeed: ', results);
-                }
-            });
-            return [2 /*return*/];
+            fromUserId = 99;
+            toUserId = 99;
+            content = 'test message';
+            skip = 0;
+            limit = 100;
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    index_1["default"].query("select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId\n        where CHAT.fromUserId = " + fromUserId + " and CHAT.toUserId = " + toUserId + " \n        order by MESSAGE.timestamp desc limit " + skip + ", " + limit, function (error, results) {
+                        if (error) {
+                            console.log('fetch message error: ', error);
+                            reject(error);
+                        }
+                        else {
+                            console.log('fetch message succeed: ', results);
+                            resolve(results);
+                        }
+                    });
+                })];
         });
     });
 }

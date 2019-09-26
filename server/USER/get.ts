@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 
     try {
         const result = await mysqlUser.getUserInfo(userId);
-        res.send({OK: true, email: result.email, nickname: result.nickname});
+        res.send({OK: true, id: userId, email: result.email, nickname: result.nickname});
     } catch (error) {
         res.send('/ 1');
     }

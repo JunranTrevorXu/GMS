@@ -75,6 +75,4 @@ server.listen(port, function(){
     console.log('listening on ', port);
 });
 
-app.listen(port, () => console.log('listening in port ', port));
-
 console.log('\x1b[33m%s\x1b[0m', 'interesting!');

@@ -2,8 +2,9 @@ import { createReducer } from "reduxsauce";
 import { InitialState } from "./InitialState";
 import { UserTypes } from "./Actions";
 
-function setUserInfo(state, { email, nickname }) {
+function setUserInfo(state, { id, email, nickname }) {
   return state.merge({
+    id,
     email,
     nickname
   });

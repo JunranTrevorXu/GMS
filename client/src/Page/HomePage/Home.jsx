@@ -103,7 +103,10 @@ class Home extends React.Component {
   }
 
   render() {
-    console.log(this.props.user);
+    if (this.props.user.id) {
+      wsocket.emit("register", {userId: this.props.user.id});
+    }
+
     return (
         <Grid className='gridContainer'>
           <Row className='rowContainer'>

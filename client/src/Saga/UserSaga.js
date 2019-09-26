@@ -6,7 +6,7 @@ export function* getUserInfo() {
   const response = yield call(UserService.getUserInfo);
   if (response.data.OK) {
     const data = response.data;
-    yield put(UserActions.setUserInfo(data.email, data.nickname));
+    yield put(UserActions.setUserInfo(data.id, data.email, data.nickname));
   }
 }
 

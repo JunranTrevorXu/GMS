@@ -2,7 +2,7 @@ import { createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
   getUserInfo: null,
-  setUserInfo: ["email", "nickname"],
+  setUserInfo: ["id", "email", "nickname"],
   getFriend: null,
   setFriend: ["friend"],
   getFriendRequest: null,
