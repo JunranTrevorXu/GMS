@@ -1,5 +1,3 @@
-import * as mysqlUser from "../Database/MySql/user";
-
 const webpush = require('web-push');
 
 const vapidKeys = {
