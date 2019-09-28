@@ -1,6 +1,5 @@
 const app = require('express')();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 require("dotenv").config();
@@ -9,10 +8,11 @@ import mysqlConnection from './Database/MySql/index';
 import applyMiddleWare from './Middleware/index';
 import applyAuthRouters from './AUTH/index';
 import applyUserRouters from './USER/index';
+import applyChatRouters from './CHAT/index';
+
+import attachWebSocketServer from './WebSocket/ws';
 
 const port:number = parseInt(process.env.port);
-
-var user_socket_map = {};
 
 mysqlConnection.connect((error) => {
     if (error) {
@@ -45,34 +45,14 @@ app.use(function(req, res, next) {
 applyMiddleWare(app);
 applyAuthRouters(app);
 applyUserRouters(app);
+applyChatRouters(app);
 
 app.get('/', (req, res) => {
     res.send("hello");
 });
 
-// ws socket handlers
-
-io.on('connection', (socket) => {
-    socket.on('register', ({ userId }) => {
-        console.log("register", userId);
-        user_socket_map[userId] = socket.id;
-    });
-
-    socket.on('typing', ({ fromUserId, toUserId }) => {
-        if (user_socket_map[toUserId]) {
-            io.to(user_socket_map[toUserId]).emit('typing', { fromUserId });
-        }
-    });
-
-    socket.on('message', ({ fromUserId, toUserId, message }) => {
-        if (user_socket_map[toUserId]) {
-            io.to(user_socket_map[toUserId]).emit('message', { fromUserId, message });
-        }
-    });
-});
+attachWebSocketServer(server);
 
 server.listen(port, function(){
     console.log('listening on ', port);
 });
-
-console.log('\x1b[33m%s\x1b[0m', 'interesting!');

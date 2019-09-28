@@ -17,26 +17,29 @@ mysqlConnection.connect((error) => {
 
 async function main() {
     //web push
-    let fromUserId = 99;
-    let toUserId = 99;
-    let content = 'test message';
+    let UserAId = 99;
+    let UserBId = 98;
+    let content = 'test message A to B';
     let skip = 0;
     let limit = 100;
+    let date = new Date();
+
+    let timestamp = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+
+    console.log(timestamp);
 
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId
-        where CHAT.fromUserId = ${fromUserId} and CHAT.toUserId = ${toUserId} 
-        order by MESSAGE.timestamp desc limit ${skip}, ${limit}`,
+        mysqlConnection.query(`insert into MESSAGE (timestamp, content) values ("${timestamp}", "${content}")`,
             (error, results) => {
                 if (error) {
-                    console.log('fetch message error: ', error);
+                    console.log('insert Message error: ', error);
                     reject(error);
                 }
                 else {
-                    console.log('fetch message succeed: ', results);
-                    resolve(results);
+                    console.log('insert Message succeed: ', results);
+                    resolve(results.insertId);
                 }
-            });
+            })
     });
 }
 

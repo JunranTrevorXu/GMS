@@ -1,8 +1,8 @@
 import mysqlConnection from './index';
 
-function insertMessage(fromUserId, toUserId, content): Promise<any> {
+function postMessage(fromUserId, toUserId, timestamp, content): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-        mysqlConnection.query(`insert into MESSAGE (timestamp, content) values (CURRENT_TIME(), "${content}")`,
+        mysqlConnection.query(`insert into MESSAGE (timestamp, content) values ("${timestamp}", "${content}")`,
             (error, results) => {
                 if (error) {
                     console.log('insert Message error: ', error);
@@ -29,10 +29,11 @@ function insertMessage(fromUserId, toUserId, content): Promise<any> {
     });
 }
 
-function fetchMessage(fromUserId, toUserId, limit, skip): Promise<any> {
+function fetchMessage(userAId, userBId, limit, skip): Promise<any> {
     return new Promise<any>((resolve, reject) => {
         mysqlConnection.query(`select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId
-        where CHAT.fromUserId = ${fromUserId} and CHAT.toUserId = ${toUserId} 
+        where (CHAT.fromUserId = ${userAId} and CHAT.toUserId = ${userBId})
+        or (CHAT.fromUserId = ${userBId} and CHAT.toUserId = ${userAId}) 
         order by MESSAGE.timestamp desc limit ${skip}, ${limit}`,
             (error, results) => {
                 if (error) {
@@ -48,6 +49,6 @@ function fetchMessage(fromUserId, toUserId, limit, skip): Promise<any> {
 }
 
 export {
-    insertMessage,
+    postMessage,
     fetchMessage,
 }

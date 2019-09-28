@@ -49,22 +49,25 @@ index_1["default"].connect(function (error) {
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var fromUserId, toUserId, content, skip, limit;
+        var UserAId, UserBId, content, skip, limit, date, timestamp;
         return __generator(this, function (_a) {
-            fromUserId = 99;
-            toUserId = 99;
-            content = 'test message';
+            UserAId = 99;
+            UserBId = 98;
+            content = 'test message A to B';
             skip = 0;
             limit = 100;
+            date = new Date();
+            timestamp = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+            console.log(timestamp);
             return [2 /*return*/, new Promise(function (resolve, reject) {
-                    index_1["default"].query("select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId\n        where CHAT.fromUserId = " + fromUserId + " and CHAT.toUserId = " + toUserId + " \n        order by MESSAGE.timestamp desc limit " + skip + ", " + limit, function (error, results) {
+                    index_1["default"].query("insert into MESSAGE (timestamp, content) values (\"" + timestamp + "\", \"" + content + "\")", function (error, results) {
                         if (error) {
-                            console.log('fetch message error: ', error);
+                            console.log('insert Message error: ', error);
                             reject(error);
                         }
                         else {
-                            console.log('fetch message succeed: ', results);
-                            resolve(results);
+                            console.log('insert Message succeed: ', results);
+                            resolve(results.insertId);
                         }
                     });
                 })];
