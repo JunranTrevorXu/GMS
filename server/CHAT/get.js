@@ -45,15 +45,19 @@ router.get('/message', function (req, res) { return __awaiter(_this, void 0, voi
         switch (_a.label) {
             case 0:
                 userAId = req.session.encryptedId;
-                userBId = req.body.withUserId;
-                limit = req.body.limit;
-                skip = req.body.skip;
+                userBId = req.query.friendId;
+                limit = req.query.limit;
+                skip = req.query.skip;
+                console.log(limit, skip);
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, mysqlChat.fetchMessage(userAId, userBId, limit, skip)];
             case 2:
                 messages = _a.sent();
+                if (messages.length < limit && messages.length > 0) {
+                    messages.push({ EOC: true });
+                }
                 res.send({ OK: true, messages: messages });
                 return [3 /*break*/, 4];
             case 3:

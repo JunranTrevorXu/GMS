@@ -16,8 +16,9 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tab: 'friendList'
-    }
+      tab: 'friendList',
+    };
+    this.initialized = false;
   }
 
   askPermission() {
@@ -106,11 +107,12 @@ class Home extends React.Component {
   }
 
   render() {
-    if (this.props.user.id) {
+    if (!this.initialized && this.props.user.id) {
       wsocket.emit("register", {userId: this.props.user.id});
+      this.initialized = true;
     }
 
-    console.log(this.props.user);
+    // console.log(this.props.user);
 
     return (
         <Grid className='gridContainer'>

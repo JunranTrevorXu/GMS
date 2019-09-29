@@ -36,7 +36,9 @@ class EditPanel extends React.Component {
     let { message } = this.state;
     message = message.replace(/\n$/, "");
     this.setState({ message: '' });
-    socket.emit('message', { fromUserId: this.props.user.id, toUserId: this.props.toUser.id, message });
+
+    if (message.length > 0)
+      socket.emit('message', { fromUserId: this.props.user.id, toUserId: this.props.toUser.id, message });
   }
 
   render() {

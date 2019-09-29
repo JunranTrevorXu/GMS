@@ -187,6 +187,21 @@ function acceptFriendRequest(fromUserId) {
   );
 }
 
+function getFriendMessage(friendId, limit, skip) {
+  const option = {
+    method: "get",
+    url: `/chat/message?friendId=${friendId}&limit=${limit}&skip=${skip}`
+  };
+  return instance(option).then(
+    response => {
+      return response;
+    },
+    error => {
+      throw error;
+    }
+  );
+}
+
 function checkAuth() {
   const option = {
     method: "get",
@@ -214,5 +229,6 @@ export {
   getFriend,
   sendFriendRequest,
   acceptFriendRequest,
+  getFriendMessage,
   checkAuth
 };

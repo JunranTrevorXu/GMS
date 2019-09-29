@@ -6,7 +6,8 @@ import {
   getFriend,
   getFriendRequest,
   sendFriendRequest,
-  acceptFriendRequest
+  acceptFriendRequest,
+  getFriendMessage
 } from "./UserSaga";
 
 export default function* root() {
@@ -15,6 +16,7 @@ export default function* root() {
     takeLatest(UserTypes.GET_FRIEND, getFriend),
     takeLatest(UserTypes.GET_FRIEND_REQUEST, getFriendRequest),
     takeLatest(UserTypes.SEND_FRIEND_REQUEST, sendFriendRequest),
-    takeLatest(UserTypes.ACCEPT_FRIEND_REQUEST, acceptFriendRequest)
+    takeLatest(UserTypes.ACCEPT_FRIEND_REQUEST, acceptFriendRequest),
+    takeLatest(UserTypes.GET_FRIEND_MESSAGE, getFriendMessage)
   ]);
 }

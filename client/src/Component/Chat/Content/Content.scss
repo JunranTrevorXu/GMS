@@ -1,0 +1,47 @@
+@import "@material/typography/mixins";
+
+.content-container {
+  height: 95%;
+  overflow: scroll;
+  padding: 10px;
+
+  .padder {
+    height: 20px;
+  }
+
+  .scroll-helper {
+    height: 10px;
+  }
+
+  .message-container {
+
+    height: 40px;
+    margin-bottom: 20px;
+
+    .eoc-message {
+      text-align: center;
+      @include mdc-typography-base;
+      font-size: 12px;
+    }
+
+    .right-message {
+      @include mdc-typography-base;
+      font-size: 18px;
+      background-color: #ffffff;
+      float: right;
+      padding: 10px;
+      border: 1px solid #018786;
+      border-radius: 10px;
+    }
+
+    .left-message {
+      @include mdc-typography-base;
+      font-size: 18px;
+      background-color: #03DAC6;
+      padding: 10px;
+      display: inline-block;
+      border: 1px solid #018786;
+      border-radius: 10px;
+    }
+  }
+}

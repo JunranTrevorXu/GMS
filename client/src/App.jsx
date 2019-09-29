@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/es/integration/react';
-import { store, persistor } from './ReduxStore/index';
+// import { PersistGate } from 'redux-persist/es/integration/react';
+import { store } from './ReduxStore/index';
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import * as UserService from './ApiService/UserService';
@@ -78,7 +78,7 @@ class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
+        {/*<PersistGate loading={null} persistor={persistor}>*/}
           <BrowserRouter>
             <Switch>
 
@@ -91,7 +91,7 @@ class App extends React.Component {
 
             </Switch>
           </BrowserRouter>
-        </PersistGate>
+        {/*</PersistGate>*/}
       </Provider>
     );
   }

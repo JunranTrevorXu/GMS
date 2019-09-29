@@ -49,28 +49,71 @@ index_1["default"].connect(function (error) {
 });
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var UserAId, UserBId, content, skip, limit, date, timestamp;
+        var UserAId, UserBId, content, skip, limit, _loop_1, i;
         return __generator(this, function (_a) {
-            UserAId = 99;
-            UserBId = 98;
-            content = 'test message A to B';
-            skip = 0;
-            limit = 100;
-            date = new Date();
-            timestamp = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
-            console.log(timestamp);
-            return [2 /*return*/, new Promise(function (resolve, reject) {
-                    index_1["default"].query("insert into MESSAGE (timestamp, content) values (\"" + timestamp + "\", \"" + content + "\")", function (error, results) {
-                        if (error) {
-                            console.log('insert Message error: ', error);
-                            reject(error);
-                        }
-                        else {
-                            console.log('insert Message succeed: ', results);
-                            resolve(results.insertId);
-                        }
-                    });
-                })];
+            switch (_a.label) {
+                case 0:
+                    UserAId = 1;
+                    UserBId = 2;
+                    content = 'test message';
+                    skip = 0;
+                    limit = 100;
+                    _loop_1 = function (i) {
+                        var timestamp;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (i % 2) {
+                                        UserBId = 1;
+                                        UserAId = 2;
+                                    }
+                                    else {
+                                        UserAId = 1;
+                                        UserBId = 2;
+                                    }
+                                    timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+                                    return [4 /*yield*/, new Promise(function (resolve, reject) {
+                                            index_1["default"].query("insert into MESSAGE (timestamp, content) values (\"" + timestamp + "\", \"" + content + "\")", function (error, results) {
+                                                if (error) {
+                                                    console.log('insert Message error: ', error);
+                                                    reject(error);
+                                                }
+                                                else {
+                                                    console.log('insert Message succeed: ', results);
+                                                    resolve(results.insertId);
+                                                }
+                                            });
+                                        }).then(function (insertId) {
+                                            index_1["default"].query("insert into CHAT (fromUserId, toUserId, messageId) \n        values (" + UserAId + ", " + UserBId + ", " + insertId + ")", function (error, results) {
+                                                if (error) {
+                                                    console.log('insert into chat error: ', error);
+                                                    throw (error);
+                                                }
+                                                else {
+                                                    console.log('insert into chat succeed: ', results);
+                                                    return;
+                                                }
+                                            });
+                                        })];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    };
+                    i = 0;
+                    _a.label = 1;
+                case 1:
+                    if (!(i < 100)) return [3 /*break*/, 4];
+                    return [5 /*yield**/, _loop_1(i)];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    i++;
+                    return [3 /*break*/, 1];
+                case 4: return [2 /*return*/];
+            }
         });
     });
 }

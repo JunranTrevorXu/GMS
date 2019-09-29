@@ -11,7 +11,6 @@ class FriendList extends React.Component {
   }
 
   render() {
-    console.log(this.props.user.friendTyping);
     return (
       <div>
         <List className='friend-list-container'>

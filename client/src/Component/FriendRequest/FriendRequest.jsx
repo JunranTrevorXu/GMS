@@ -66,7 +66,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   sendFriendRequest: (toUserEmail) => dispatch(UserActions.sendFriendRequest(toUserEmail)),
-  acceptFriendRequest: (fromUserId) => dispatch(UserActions.acceptFriendRequest(fromUserId))
+  acceptFriendRequest: (fromUserId) => dispatch(UserActions.acceptFriendRequest(fromUserId)),
 });
 
 export default connect(

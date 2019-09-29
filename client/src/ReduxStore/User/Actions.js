@@ -10,7 +10,12 @@ const { Types, Creators } = createActions({
   sendFriendRequest: ["toUserEmail"],
   acceptFriendRequest: ["fromUserId"],
   friendStartTyping: ["friendId"],
-  friendStopTyping: ["friendId"]
+  friendStopTyping: ["friendId"],
+  getFriendMessage: ["friendId", "limit", "skip", "refresh"],
+  insertFriendMessage: ["friendId", "messages", "refresh"],
+  appendFriendMessage: ["friendId", "message"],
+  enqueueFriendSendingMessage: ["friendId", "message"],
+  dequeueFriendSendingMessage: ["friendId"]
 });
 
 export const UserTypes = Types;

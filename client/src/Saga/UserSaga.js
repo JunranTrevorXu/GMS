@@ -15,6 +15,11 @@ export function* getFriend() {
   if (response.data.OK) {
     const data = response.data;
     yield put(UserActions.setFriend(data.friendList));
+    for (let i = 0; i < data.friendList.length; i++) {
+      yield put(
+        UserActions.getFriendMessage(data.friendList[i].id, 20, 0, true)
+      );
+    }
   }
 }
 
@@ -38,5 +43,23 @@ export function* acceptFriendRequest(action) {
   if (response.data.OK) {
     yield put(UserActions.getFriendRequest());
     yield put(UserActions.getFriend());
+  }
+}
+
+export function* getFriendMessage(action) {
+  const response = yield call(
+    UserService.getFriendMessage,
+    action.friendId,
+    action.limit,
+    action.skip
+  );
+  if (response.data.OK) {
+    yield put(
+      UserActions.insertFriendMessage(
+        action.friendId,
+        response.data.messages,
+        action.refresh
+      )
+    );
   }
 }
