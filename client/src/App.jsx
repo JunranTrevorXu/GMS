@@ -65,6 +65,10 @@ class App extends React.Component {
     window.addEventListener('beforeunload', async (event) => {
       await UserService.offline();
     });
+
+    window.addEventListener('unload', async(event) => {
+      await UserService.offline();
+    })
   }
 
   render() {

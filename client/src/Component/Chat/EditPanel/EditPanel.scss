@@ -1,0 +1,26 @@
+@import '@material/react-button/index.scss';
+@import '@material/react-text-field/index.scss';
+@import '@material/textfield/mixins';
+@import '@material/button/mixins';
+
+.edit-panel-container {
+
+  height: 100%;
+  padding: 10px;
+
+  .text-field {
+    @include mdc-text-field-textarea-stroke-color(#018786);
+    width: 100%;
+    height: 80%;
+    resize: none;
+  }
+
+  .button {
+    @include mdc-button-ink-color(#018786);
+    margin-top: 10px;
+    font-size: 15px;
+    float: right;
+    width: 100px;
+    height: 40px;
+  }
+}

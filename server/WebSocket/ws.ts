@@ -6,26 +6,31 @@ import webpush from "../Service/webpush";
 
 var user_socket_map = {};
 
+function unregisterUserSocket(userId) {
+    console.log("unregister: ", userId);
+    user_socket_map[userId] = null;
+}
+
 export default function attachWebSocketServer(server) {
     const io = require('socket.io')(server);
 
     io.on('connection', (socket) => {
         socket.on('register', ({ userId }) => {
-            console.log("register", userId);
+            console.log("register: ", userId);
             user_socket_map[userId] = socket.id;
         });
 
         socket.on('typing', ({ fromUserId, toUserId }) => {
+            console.log("typing: ", fromUserId, toUserId);
             if (user_socket_map[toUserId]) {
                 io.to(user_socket_map[toUserId]).emit('typing', { fromUserId });
             }
         });
 
         socket.on('message', async ({ fromUserId, toUserId, message }) => {
+            const timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
             if (user_socket_map[toUserId]) {
-                const timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
                 io.to(user_socket_map[toUserId]).emit('message', { fromUserId, timestamp, message });
-                await mysqlChat.postMessage(fromUserId, toUserId, timestamp, message);
             }
             else {
                 // push
@@ -45,6 +50,11 @@ export default function attachWebSocketServer(server) {
                 };
                 webpush.sendNotification(pushSubscriptionObj, Buffer.from(JSON.stringify(payloadObj)));
             }
+            await mysqlChat.postMessage(fromUserId, toUserId, timestamp, message);
         });
     });
+}
+
+export {
+    unregisterUserSocket
 }

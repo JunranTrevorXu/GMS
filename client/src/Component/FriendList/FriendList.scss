@@ -1,0 +1,10 @@
+@import '@material/react-list/index.scss';
+
+.friend-list-container {
+  height: 95vh;
+  overflow: scroll;
+
+  .list-item {
+    justify-content: space-between;
+  }
+}

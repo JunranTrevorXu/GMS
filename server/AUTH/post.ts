@@ -3,6 +3,7 @@ const router = express.Router();
 
 import sendEmail from '../Service/email';
 import * as mysqlUser from '../Database/MySql/user';
+import { unregisterUserSocket } from "../WebSocket/ws";
 
 router.post('/signin', async(req, res) => {
     const email = req.body.email;
@@ -115,6 +116,7 @@ router.post('/offline', async (req, res) => {
 
     try {
         await mysqlUser.setOffline(userId);
+        unregisterUserSocket(userId);
     } catch (error) {
         res.send('/offline 1');
         return;

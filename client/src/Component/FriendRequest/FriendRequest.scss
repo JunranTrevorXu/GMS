@@ -9,6 +9,7 @@
     width: 100%;
     @include mdc-text-field-bottom-line-color(#018786);
     @include mdc-text-field-hover-bottom-line-color(#018786);
+    @include mdc-text-field-outline-color(#018786)
   }
 
   .send-request-button {

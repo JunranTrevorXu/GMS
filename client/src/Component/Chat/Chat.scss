@@ -1,0 +1,22 @@
+@import "@material/typography/mixins";
+
+.chat-container {
+
+  .chat-header {
+    @include mdc-typography-base;
+    font-size: 18px;
+    text-align: center;
+    height: 5vh;
+    padding-top: 10px;
+    border-bottom: 1px solid #018786;
+  }
+
+  .chat-content {
+    height: 60vh;
+    border-bottom: 1px solid #018786;
+  }
+
+  .chat-edit-panel {
+    height: 30vh;
+  }
+}

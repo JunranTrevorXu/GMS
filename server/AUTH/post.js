@@ -40,6 +40,7 @@ var express = require('express');
 var router = express.Router();
 var email_1 = require("../Service/email");
 var mysqlUser = require("../Database/MySql/user");
+var ws_1 = require("../WebSocket/ws");
 router.post('/signin', function (req, res) { return __awaiter(_this, void 0, void 0, function () {
     var email, password, result, error_1, _a, error_2;
     return __generator(this, function (_b) {
@@ -221,6 +222,7 @@ router.post('/offline', function (req, res) { return __awaiter(_this, void 0, vo
                 return [4 /*yield*/, mysqlUser.setOffline(userId)];
             case 2:
                 _a.sent();
+                ws_1.unregisterUserSocket(userId);
                 return [3 /*break*/, 4];
             case 3:
                 error_7 = _a.sent();

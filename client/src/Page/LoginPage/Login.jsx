@@ -9,7 +9,7 @@ import TextField, { Input } from '@material/react-text-field';
 
 import * as UserService from '../../ApiService/UserService';
 
-import './LoginStyle.scss';
+import './Login.scss';
 
 class Login extends React.Component {
     constructor(props) {
@@ -187,7 +187,7 @@ class Login extends React.Component {
                     <Cell columns={3} />
                     <Cell columns={6}>
                         <Card className='loginContainer'>
-                            <div className='logoContainer'>GMS</div>
+                            <div className='logoContainer'>JMS</div>
                             <TabBar
                                 className='tabBar'
                                 activeIndex={activeIndex} 

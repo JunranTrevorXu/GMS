@@ -10,7 +10,10 @@ router.get('/message', async (req, res) => {
     const skip = req.body.skip;
 
     try {
-        const messages = await mysqlChat.fetchMessage(userAId, userBId, limit, skip);
+        let messages = await mysqlChat.fetchMessage(userAId, userBId, limit, skip);
+        if (messages.length < limit) {
+            messages.push({EOC: true});
+        }
         res.send({OK: true, messages});
     } catch (error) {
         res.send('/chat/message 1')

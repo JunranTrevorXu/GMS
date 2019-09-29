@@ -1,13 +1,9 @@
 import React from 'react';
 import { connect } from "react-redux";
 import List, { ListItem } from '@material/react-list';
-import Drawer, {
-	DrawerContent,
-} from '@material/react-drawer';
+import Drawer from '@material/react-drawer';
 
 import './Misc.scss';
-
-import * as UserService from '../../ApiService/UserService';
 
 class Misc extends React.Component {
   constructor(props) {

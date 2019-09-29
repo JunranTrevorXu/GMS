@@ -34,7 +34,7 @@ class FriendRequest extends React.Component {
           className='send-request-button'
           onClick={() => {this.sendFriendRequest(this.state.addFriendEmail)}}
         >
-          Send Request
+          Add Friend
         </Button>
         <hr className='hr-line'/>
         <hr className='hr-line'/>

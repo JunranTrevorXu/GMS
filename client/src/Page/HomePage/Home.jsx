@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from "react-redux";
 import {Cell, Grid, Row} from '@material/react-layout-grid';
-import Misc from './Misc';
-import FriendRequest from './FriendRequest';
-import FriendList from "./FriendList";
+import Misc from '../../Component/Misc/Misc';
+import FriendRequest from '../../Component/FriendRequest/FriendRequest';
+import FriendList from "../../Component/FriendList/FriendList";
+import Chat from "../../Component/Chat/Chat";
 
 import UserActions from '../../ReduxStore/User/Actions';
 import * as UserService from '../../ApiService/UserService';
@@ -70,7 +71,7 @@ class Home extends React.Component {
       console.log(JSON.stringify(pushSubscription));
       pushSubscription = JSON.parse(JSON.stringify(pushSubscription));
 
-      const subscribeResult = await UserService.subscribe(pushSubscription.endpoint, pushSubscription.keys.p256dh, pushSubscription.keys.auth);
+      await UserService.subscribe(pushSubscription.endpoint, pushSubscription.keys.p256dh, pushSubscription.keys.auth);
     } catch (e) {
       // if permission not granted
       console.log(e);
@@ -85,12 +86,14 @@ class Home extends React.Component {
 
   handleSelectTab(tab) {
     this.setState({ tab });
+    if (tab !== 'friendList')
+      this.setState({ toUser: null });
   }
 
   renderList() {
     switch(this.state.tab) {
       case "friendList":
-        return <FriendList />;
+        return <FriendList setToUser={(user) => this.setState({toUser: user})} />;
       case "friendRequest":
         return <FriendRequest />;
       case "userProfile":
@@ -107,6 +110,8 @@ class Home extends React.Component {
       wsocket.emit("register", {userId: this.props.user.id});
     }
 
+    console.log(this.props.user);
+
     return (
         <Grid className='gridContainer'>
           <Row className='rowContainer'>
@@ -119,7 +124,9 @@ class Home extends React.Component {
             <Cell columns={3} className='friendListContainer'>
               {this.renderList()}
             </Cell>
-            <Cell columns={8} className='chatContainer'></Cell>
+            <Cell columns={8} className='chatContainer'>
+              <Chat toUser={this.state.toUser} />
+            </Cell>
           </Row>
         </Grid>
     )

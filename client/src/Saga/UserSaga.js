@@ -1,4 +1,4 @@
-import { put, call, select, take, takeEvery } from "redux-saga/effects";
+import { put, call } from "redux-saga/effects";
 import * as UserService from "../ApiService/UserService";
 import UserActions from "../ReduxStore/User/Actions";
 

@@ -1,5 +1,6 @@
 import { createReducer } from "reduxsauce";
 import { InitialState } from "./InitialState";
+import { Map } from "immutable";
 import { UserTypes } from "./Actions";
 
 function setUserInfo(state, { id, email, nickname }) {
@@ -23,20 +24,33 @@ function setFriendRequest(state, { friendRequest }) {
 }
 
 function friendStartTyping(state, { friendId }) {
-  let friendTyping = state.friendTyping;
-  friendTyping[friendId] = true;
+  let friendTyping = state.get("friendTyping");
+  let newFriendTyping = {};
+
+  // fucking firefox support
+  for (let friend of Object.keys(friendTyping)) {
+    newFriendTyping[friend] = friendTyping[friend];
+  }
+
+  newFriendTyping[friendId] = true;
 
   return state.merge({
-    friendTyping
+    friendTyping: Map(newFriendTyping)
   });
 }
 
 function friendStopTyping(state, { friendId }) {
-  let friendTyping = state.friendTyping;
-  friendTyping[friendId] = false;
+  let friendTyping = state.get("friendTyping");
+  let newFriendTyping = {};
+
+  for (let friend of Object.keys(friendTyping)) {
+    newFriendTyping[friend] = friendTyping[friend];
+  }
+
+  newFriendTyping[friendId] = false;
 
   return state.merge({
-    friendTyping
+    friendTyping: Map(newFriendTyping)
   });
 }
 

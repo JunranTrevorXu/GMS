@@ -15,7 +15,7 @@ socket.on("typing", ({ fromUserId }) => {
 
   store.dispatch(UserActions.friendStartTyping(fromUserId));
   timeoutId = setTimeout(
-    store.dispatch(UserActions.friendStopTyping(fromUserId)),
+    () => store.dispatch(UserActions.friendStopTyping(fromUserId)),
     1000
   );
 });

@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var app = require('express')();
 var server = require('http').createServer(app);
-var io = require('socket.io')(server);
 var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 require("dotenv").config();
@@ -10,8 +9,9 @@ var index_1 = require("./Database/MySql/index");
 var index_2 = require("./Middleware/index");
 var index_3 = require("./AUTH/index");
 var index_4 = require("./USER/index");
+var index_5 = require("./CHAT/index");
+var ws_1 = require("./WebSocket/ws");
 var port = parseInt(process.env.port);
-var user_socket_map = {};
 index_1["default"].connect(function (error) {
     if (error) {
         console.error('mysql connecting: error' + error.stack);
@@ -39,30 +39,11 @@ app.use(function (req, res, next) {
 index_2["default"](app);
 index_3["default"](app);
 index_4["default"](app);
+index_5["default"](app);
 app.get('/', function (req, res) {
     res.send("hello");
 });
-// ws socket handlers
-io.on('connection', function (socket) {
-    socket.on('register', function (_a) {
-        var userId = _a.userId;
-        console.log("register", userId);
-        user_socket_map[userId] = socket.id;
-    });
-    socket.on('typing', function (_a) {
-        var fromUserId = _a.fromUserId, toUserId = _a.toUserId;
-        if (user_socket_map[toUserId]) {
-            io.to(user_socket_map[toUserId]).emit('typing', { fromUserId: fromUserId });
-        }
-    });
-    socket.on('message', function (_a) {
-        var fromUserId = _a.fromUserId, toUserId = _a.toUserId, message = _a.message;
-        if (user_socket_map[toUserId]) {
-            io.to(user_socket_map[toUserId]).emit('message', { fromUserId: fromUserId, message: message });
-        }
-    });
-});
+ws_1["default"](server);
 server.listen(port, function () {
     console.log('listening on ', port);
 });
-console.log('\x1b[33m%s\x1b[0m', 'interesting!');
