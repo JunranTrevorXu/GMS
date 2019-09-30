@@ -34,7 +34,7 @@ export default function attachWebSocketServer(server) {
                 io.to(user_socket_map[toUserId]).emit('message', { fromUserId, timestamp, message });
             }
             else {
-                // push
+                // web push
                 const subscribeData = await mysqlUser.getSubscribe(toUserId);
                 const pushSubscriptionObj = {
                     endpoint: subscribeData.endpoint,
