@@ -73,7 +73,7 @@ function main() {
                                     }
                                     timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
                                     return [4 /*yield*/, new Promise(function (resolve, reject) {
-                                            index_1["default"].query("insert into MESSAGE (timestamp, content) values (\"" + timestamp + "\", \"" + content + "\")", function (error, results) {
+                                            index_1["default"].query("insert into MESSAGE (timestamp, content) values (\"" + timestamp + "\", \"" + i + "\")", function (error, results) {
                                                 if (error) {
                                                     console.log('insert Message error: ', error);
                                                     reject(error);
@@ -104,7 +104,7 @@ function main() {
                     i = 0;
                     _a.label = 1;
                 case 1:
-                    if (!(i < 100)) return [3 /*break*/, 4];
+                    if (!(i < 500)) return [3 /*break*/, 4];
                     return [5 /*yield**/, _loop_1(i)];
                 case 2:
                     _a.sent();

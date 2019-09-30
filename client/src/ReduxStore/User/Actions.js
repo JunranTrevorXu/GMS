@@ -13,7 +13,9 @@ const { Types, Creators } = createActions({
   friendStopTyping: ["friendId"],
   getFriendMessage: ["friendId", "limit", "skip", "refresh"],
   insertFriendMessage: ["friendId", "messages", "refresh"],
+  setFriendMessageLoading: ["friendId", "loading"],
   appendFriendMessage: ["friendId", "message"],
+  setFriendLastMessageAction: ["friendId", "action"],
   enqueueFriendSendingMessage: ["friendId", "message"],
   dequeueFriendSendingMessage: ["friendId"]
 });

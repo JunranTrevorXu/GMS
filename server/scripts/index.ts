@@ -23,7 +23,7 @@ async function main() {
     let skip = 0;
     let limit = 100;
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 500; i++) {
 
         if (i % 2) {
             UserBId = 1;
@@ -37,7 +37,7 @@ async function main() {
         let timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
 
         await new Promise<any>((resolve, reject) => {
-            mysqlConnection.query(`insert into MESSAGE (timestamp, content) values ("${timestamp}", "${content}")`,
+            mysqlConnection.query(`insert into MESSAGE (timestamp, content) values ("${timestamp}", "${i}")`,
                 (error, results) => {
                     if (error) {
                         console.log('insert Message error: ', error);

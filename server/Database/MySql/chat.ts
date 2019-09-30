@@ -34,7 +34,7 @@ function fetchMessage(userAId, userBId, limit, skip): Promise<any> {
         mysqlConnection.query(`select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId
         where (CHAT.fromUserId = ${userAId} and CHAT.toUserId = ${userBId})
         or (CHAT.fromUserId = ${userBId} and CHAT.toUserId = ${userAId}) 
-        order by MESSAGE.timestamp desc limit ${skip}, ${limit}`,
+        order by MESSAGE.timestamp desc, MESSAGE.id desc limit ${skip}, ${limit}`,
             (error, results) => {
                 if (error) {
                     console.log('fetch message error: ', error);

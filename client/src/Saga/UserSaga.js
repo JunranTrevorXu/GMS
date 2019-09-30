@@ -47,6 +47,7 @@ export function* acceptFriendRequest(action) {
 }
 
 export function* getFriendMessage(action) {
+  yield put(UserActions.setFriendMessageLoading(action.friendId, true));
   const response = yield call(
     UserService.getFriendMessage,
     action.friendId,
@@ -55,11 +56,15 @@ export function* getFriendMessage(action) {
   );
   if (response.data.OK) {
     yield put(
+      UserActions.setFriendLastMessageAction(action.friendId, "insert")
+    );
+    yield put(
       UserActions.insertFriendMessage(
         action.friendId,
         response.data.messages,
         action.refresh
       )
     );
+    yield put(UserActions.setFriendMessageLoading(action.friendId, false));
   }
 }

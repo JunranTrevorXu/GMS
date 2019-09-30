@@ -8,5 +8,7 @@ export const InitialState = Map({
   friendRequest: [],
   friendTyping: {},
   friendMessage: {},
+  friendMessageLoading: {},
+  friendLastMessageAction: {},
   friendSendingMessage: {}
 });

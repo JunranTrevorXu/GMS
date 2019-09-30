@@ -69,6 +69,7 @@ function attachWebSocketServer(server) {
                     switch (_b.label) {
                         case 0:
                             timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+                            io.to(user_socket_map[fromUserId]).emit('messageSent', { toUserId: toUserId, timestamp: timestamp, message: message });
                             if (!user_socket_map[toUserId]) return [3 /*break*/, 1];
                             io.to(user_socket_map[toUserId]).emit('message', { fromUserId: fromUserId, timestamp: timestamp, message: message });
                             return [3 /*break*/, 4];

@@ -6,9 +6,17 @@ const socket = io("http://localhost:1994");
 
 var timeoutId;
 
-socket.on("messageSent", () => {});
+socket.on("message", ({ fromUserId, timestamp, message }) => {
+  const messageObj = { timestamp, content: message, fromUserId, id: -1 };
+  store.dispatch(UserActions.setFriendLastMessageAction(fromUserId, "append"));
+  store.dispatch(UserActions.appendFriendMessage(fromUserId, messageObj));
+});
 
-socket.on("message", ({ fromUserId, message }) => {});
+socket.on("messageSent", ({ toUserId, timestamp, message }) => {
+  const messageObj = { timestamp, content: message, toUserId, id: -1 };
+  store.dispatch(UserActions.setFriendLastMessageAction(toUserId, "append"));
+  store.dispatch(UserActions.appendFriendMessage(toUserId, messageObj));
+});
 
 socket.on("typing", ({ fromUserId }) => {
   if (timeoutId) clearTimeout(timeoutId);

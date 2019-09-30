@@ -29,7 +29,7 @@ function postMessage(fromUserId, toUserId, timestamp, content) {
 exports.postMessage = postMessage;
 function fetchMessage(userAId, userBId, limit, skip) {
     return new Promise(function (resolve, reject) {
-        index_1["default"].query("select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId\n        where (CHAT.fromUserId = " + userAId + " and CHAT.toUserId = " + userBId + ")\n        or (CHAT.fromUserId = " + userBId + " and CHAT.toUserId = " + userAId + ") \n        order by MESSAGE.timestamp desc limit " + skip + ", " + limit, function (error, results) {
+        index_1["default"].query("select * from MESSAGE inner join CHAT on MESSAGE.id = CHAT.messageId\n        where (CHAT.fromUserId = " + userAId + " and CHAT.toUserId = " + userBId + ")\n        or (CHAT.fromUserId = " + userBId + " and CHAT.toUserId = " + userAId + ") \n        order by MESSAGE.timestamp desc, MESSAGE.id desc limit " + skip + ", " + limit, function (error, results) {
             if (error) {
                 console.log('fetch message error: ', error);
                 reject(error);

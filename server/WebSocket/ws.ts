@@ -29,6 +29,7 @@ export default function attachWebSocketServer(server) {
 
         socket.on('message', async ({ fromUserId, toUserId, message }) => {
             const timestamp = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+            io.to(user_socket_map[fromUserId]).emit('messageSent', { toUserId, timestamp, message });
             if (user_socket_map[toUserId]) {
                 io.to(user_socket_map[toUserId]).emit('message', { fromUserId, timestamp, message });
             }
