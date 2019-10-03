@@ -15,7 +15,9 @@ class Content extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.user.friendLastMessageAction[this.props.toUser.id] === 'append')
+    //console.log(this.scrollHelper.scrollHeight, this.scrollHelper.scrollTop);
+    const closeToBottom = this.scrollHelper.scrollHeight - this.scrollHelper.scrollTop < 600;
+    if (this.props.user.friendLastMessageAction[this.props.toUser.id] === 'append' && closeToBottom)
       this.scrollHelper.scrollTop = this.scrollHelper.scrollHeight;
     else if (this.props.user.friendLastMessageAction[this.props.toUser.id] === 'insert')
       this.scrollHelper.scrollTop = 200;

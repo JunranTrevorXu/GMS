@@ -105,7 +105,6 @@ function appendFriendMessage(state, { friendId, message }) {
       .utc()
       .format("YYYY-MM-DD HH:mm:ss");
     if (currentMessageTime.isBefore(newMessageTime)) {
-      console.log("found ", i);
       newFriendMessage[friendId].splice(i + 1, 0, message);
       break;
     }
